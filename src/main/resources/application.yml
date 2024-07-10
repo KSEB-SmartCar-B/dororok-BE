@@ -1,26 +1,30 @@
+server:
+  port: 9999
+
 spring:
-  # H2 Database ??
+
+  # H2 Database 설정
   datasource:
     driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:test'   # H2 DB ?? ?? (In-Memory Mode)
-    #url: 'jdbc:h2:~/test'    # H2 DB ?? ?? (Embedded Mode)
+    url: 'jdbc:h2:mem:test'   # H2 DB 연결 주소 (In-Memory Mode)
+    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
     username: sa
     password:
 
-  # JPA ??
+  # JPA 설정
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create        # DB ??? ?? (none, create, create-drop, update, validate)
+      ddl-auto: create        # DB 초기화 전략 (none, create, create-drop, update, validate)
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true      # ?? ?? ?? (??)
-        show_sql: true        # ?? ?? ??
+        format_sql: true      # 쿼리 로그 포맷 (정렬)
+        show_sql: true        # 쿼리 로그 출력
 
     springdoc:
       swagger-ui:
-        #path: /api-test  # swagger-ui 접근 경로에 대한 별칭, 해당 주소로 접속해도 http://localhost:8080/swagger-ui/index.html로 리다이렉션 됨.
+        #path: /api-test  # swagger-ui 접근 경로에 대한 별칭, 해당 주소로 접속해도 http://localhost:9999/swagger-ui/index.html로 리다이렉션 됨.
 
         groups-order: DESC # path, query, body, response 순으로 출력
 
