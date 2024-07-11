@@ -21,6 +21,11 @@ public class SpotifyController {
         this.spotifyAccessToken = spotifyAccessToken;
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "test 성공";
+    }
+
     @GetMapping("/search")
     public ResponseEntity<String> search(@RequestParam String query, @RequestParam String type) {
         String searchEndpoint = "https://api.spotify.com/v1/search";
