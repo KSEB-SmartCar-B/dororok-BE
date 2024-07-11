@@ -23,7 +23,7 @@ public class SpotifyController {
 
     @GetMapping("/test")
     public String test(){
-        return "test 성공14";
+        return "test 성공15";
     }
 
     @GetMapping("/search")
