@@ -1,14 +1,9 @@
 package com.smartcar.dororok.member.controller;
 
 import com.smartcar.dororok.global.auth.dto.JwtToken;
-import com.smartcar.dororok.global.exception.CustomException;
-import com.smartcar.dororok.global.exception.ErrorCode;
 import com.smartcar.dororok.member.domain.dto.*;
-import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +22,15 @@ public class MemberController {
 
     @PostMapping("/isSigned")
     @Operation(summary = "가입 여부", description = "카카오 액세스 토큰 이용하여 가입여부 판단 할 때 사용하는 API")
-    public ResponseEntity<Boolean> isSigned(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
+    public ResponseEntity<IsSignedDto> isSigned(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
 
         String kakaoAccessToken = kakaoAccessTokenDto.getKakaoAccessToken();
 
-        return ResponseEntity.ok(memberService.isSignedUp(kakaoAccessToken));
+        IsSignedDto isSignedDto = new IsSignedDto();
+
+        isSignedDto.setIsSigned(memberService.isSignedUp(kakaoAccessToken));
+
+        return ResponseEntity.ok(isSignedDto);
     }
 
     @PostMapping("/sign-in")
