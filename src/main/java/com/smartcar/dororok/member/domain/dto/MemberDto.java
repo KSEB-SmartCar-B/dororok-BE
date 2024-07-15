@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MemberDto {
     private Long id;
-    private String email;
+    //private String email;
     private String refreshToken;
 }
