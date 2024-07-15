@@ -36,7 +36,6 @@ public class MemberService {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
         Member member = Member.builder()
-                .id(getId(signUpDto.getKakaoAccessToken()))
                 .username(getUsername(signUpDto.getKakaoAccessToken()))
                 .nickname(signUpDto.getNickname())
                 .birthday(signUpDto.getBirthday())
@@ -50,7 +49,7 @@ public class MemberService {
 
     @Transactional
     public Boolean isSignedUp(String kakaoAccessToken) {
-        Member member = memberRepository.findById(getId(kakaoAccessToken)).orElse(null);
+        Member member = memberRepository.findByUsername(getUsername(kakaoAccessToken)).orElse(null);
         if(member == null) {
             throw new CustomException(ErrorCode.NOT_EXIST_USER);
         }
@@ -113,7 +112,7 @@ public class MemberService {
     }
 
     public String getUsername(String token) {
-        return kakaoInfoService.getUserProfileByToken(token).getEmail();
+        return String.valueOf(kakaoInfoService.getUserProfileByToken(token).getId());
     }
 }
 

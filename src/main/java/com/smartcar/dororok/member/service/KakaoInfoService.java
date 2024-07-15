@@ -30,7 +30,7 @@ public class KakaoInfoService { // 카카오 API를 이용해 토큰을 전송�
         KakaoInfoDto kakaoInfoDto = new KakaoInfoDto(userAttributesByToken);
         MemberDto memberDto = MemberDto.builder()
                 .id(kakaoInfoDto.getId())
-                .email(kakaoInfoDto.getEmail())
+                //.email(kakaoInfoDto.getEmail())
                 .build();
 
         return memberDto;

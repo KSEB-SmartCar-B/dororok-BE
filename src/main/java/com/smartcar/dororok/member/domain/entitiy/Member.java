@@ -23,7 +23,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member implements UserDetails {
 
-    @Id // 카카오에서 제공하는 카카오ID
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -43,7 +44,7 @@ public class Member implements UserDetails {
     private Boolean locationInfoAgreement;
 
     @Column(nullable = false)
-    private String username; //프런트에서 주는 액세스 토큰으로 받아오는 카카오 계정의 이메일 (중복방지 위해!)
+    private String username; //프런트에서 주는 액세스 토큰으로 받아오는 카카오 계정의 회원번호 (중복방지 위해!)
 
     @ColumnDefault("'n'")
     private String password;
