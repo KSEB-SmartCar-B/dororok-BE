@@ -1,15 +1,19 @@
 package com.smartcar.dororok.spotify.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
+@RequestMapping("/spotify")
+@Tag(name = "Spotify Controller", description = "Spotify Web API")
 public class SpotifyController {
 
     private final RestTemplate restTemplate;
@@ -21,10 +25,6 @@ public class SpotifyController {
         this.spotifyAccessToken = spotifyAccessToken;
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "test 성공15";
-    }
 
     @GetMapping("/search")
     public ResponseEntity<String> search(@RequestParam String query, @RequestParam String type) {
