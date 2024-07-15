@@ -64,9 +64,11 @@ public class MemberController {
         return memberService.signInTest(email);
     }
 
-//    @GetMapping("/test")
-//    public String test() {
-//        return "success";
+    @GetMapping("/test")
+    @Operation(summary = "로그인 테스트", description = "로그인 하지않고 호출시, 오류발생")
+    public String test() {
+        return "success";
+    }
 }
 
 
