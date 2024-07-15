@@ -5,22 +5,26 @@ spring:
 
   # H2 Database 설정
   datasource:
-    driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:test'   # H2 DB 연결 주소 (In-Memory Mode)
-    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
-    username: sa
-    password:
+#    driver-class-name: org.h2.Driver
+#    url: 'jdbc:h2:mem:test'   # H2 DB 연결 주소 (In-Memory Mode)
+#    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
+#    username: sa
+#    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   # JPA 설정
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create        # DB 초기화 전략 (none, create, create-drop, update, validate)
+      ddl-auto: update        # DB 초기화 전략 (none, create, create-drop, update, validate)
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true      # 쿼리 로그 포맷 (정렬)
-        show_sql: true        # 쿼리 로그 출력
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false      # 쿼리 로그 포맷 (정렬)
+        show_sql: false        # 쿼리 로그 출력
 
     springdoc:
       swagger-ui:
@@ -34,3 +38,12 @@ spring:
 
       #paths-to-match:
         #- /api/** # swagger-ui에 표시할 api의 엔드포인트 패턴
+
+jwt:
+  secret: 18b88ec0b2a5b0d2dafe5113d316a743bb7872269f6f9b106948c968cf0051fa
+  access:
+    token:
+      expiration: 18000000 # 5시간
+  refresh:
+    token:
+      expiration: 1209600000 # 2주
