@@ -50,9 +50,9 @@ public class MemberService {
     @Transactional
     public Boolean isSignedUp(String kakaoAccessToken) {
         Member member = memberRepository.findByUsername(getUsername(kakaoAccessToken)).orElse(null);
-        if(member == null) {
-            throw new CustomException(ErrorCode.NOT_EXIST_USER);
-        }
+//        if(member == null) {
+//            throw new CustomException(ErrorCode.NOT_EXIST_USER);
+//        }
         return member != null;
     }
 
