@@ -25,30 +25,28 @@ public class MemberController {
     private final MemberService memberService;
 
 
+    @PostMapping("/isSigned")
+    @Operation(summary = "가입 여부", description = "카카오 액세스 토큰 이용하여 가입여부 판단 할 때 사용하는 API")
+    public ResponseEntity<Boolean> isSigned(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
+
+        String kakaoAccessToken = kakaoAccessTokenDto.getKakaoAccessToken();
+
+        return ResponseEntity.ok(memberService.isSignedUp(kakaoAccessToken));
+    }
+
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = "카카오 액세스 토큰 이용하여 로그인 할 때 사용하는 API")
-    public ResponseEntity<SignInDto> signIn(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
+    public ResponseEntity<JwtToken> signIn(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
 
-        SignInDto signInDto = new SignInDto();
         String kakaoAccessToken = kakaoAccessTokenDto.getKakaoAccessToken();
-        Boolean signedUp = memberService.isSignedUp(kakaoAccessToken);
 
-        signInDto.setIsSigned(signedUp);
-        if (!signedUp) {
-            return ResponseEntity.ok(signInDto);
-        }
-        signInDto.setJwtToken(memberService.signIn(kakaoAccessToken));
-        return ResponseEntity.ok(signInDto);
+        return ResponseEntity.ok(memberService.signIn(kakaoAccessToken));
     }
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입", description = "카카오 액세스 토큰 이용하여 회원가입 할 때 사용하는 API")
     public ResponseEntity<String> signUp(@RequestBody SignUpDto signUpDto) {
 
-        Boolean signedUp = memberService.isSignedUp(signUpDto.getKakaoAccessToken());
-        if (signedUp) {
-            throw new CustomException(ErrorCode.EXIST_USER);
-        }
         memberService.signUp(signUpDto);
         return ResponseEntity.ok("회원가입 완료");
     }
