@@ -44,10 +44,11 @@ public class MemberController {
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입", description = "카카오 액세스 토큰 이용하여 회원가입 할 때 사용하는 API")
-    public ResponseEntity<String> signUp(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<JwtToken> signUp(@RequestBody SignUpDto signUpDto) {
 
         memberService.signUp(signUpDto);
-        return ResponseEntity.ok("회원가입 완료");
+
+        return ResponseEntity.ok(memberService.signIn(signUpDto.getKakaoAccessToken()));
     }
 
     @PostMapping("/token/refresh")
