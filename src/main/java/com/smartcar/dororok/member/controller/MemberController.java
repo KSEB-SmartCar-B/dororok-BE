@@ -3,10 +3,7 @@ package com.smartcar.dororok.member.controller;
 import com.smartcar.dororok.global.auth.dto.JwtToken;
 import com.smartcar.dororok.global.exception.CustomException;
 import com.smartcar.dororok.global.exception.ErrorCode;
-import com.smartcar.dororok.member.domain.dto.AccessTokenDto;
-import com.smartcar.dororok.member.domain.dto.KakaoAccessTokenDto;
-import com.smartcar.dororok.member.domain.dto.RefreshTokenDto;
-import com.smartcar.dororok.member.domain.dto.SignUpDto;
+import com.smartcar.dororok.member.domain.dto.*;
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,18 +24,21 @@ public class MemberController {
 
     private final MemberService memberService;
 
+
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = "카카오 액세스 토큰 이용하여 로그인 할 때 사용하는 API")
-    public ResponseEntity<JwtToken> signIn(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
+    public ResponseEntity<SignInDto> signIn(@RequestBody KakaoAccessTokenDto kakaoAccessTokenDto) {
 
+        SignInDto signInDto = new SignInDto();
         String kakaoAccessToken = kakaoAccessTokenDto.getKakaoAccessToken();
-
         Boolean signedUp = memberService.isSignedUp(kakaoAccessToken);
-        if (!signedUp) {
-            throw new CustomException(ErrorCode.NOT_EXIST_USER);
-        }
-        return ResponseEntity.ok(memberService.signIn(kakaoAccessToken));
 
+        signInDto.setIsSigned(signedUp);
+        if (!signedUp) {
+            return ResponseEntity.ok(signInDto);
+        }
+        signInDto.setJwtToken(memberService.signIn(kakaoAccessToken));
+        return ResponseEntity.ok(signInDto);
     }
 
     @PostMapping("/sign-up")
