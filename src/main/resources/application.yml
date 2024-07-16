@@ -21,13 +21,11 @@ spring:
       max-lifetime: 1800000 #반납된 커넥션의 최대 수명
 
   # JPA 설정
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    jpa:
     hibernate:
       ddl-auto: update        # DB 초기화 전략 (none, create, create-drop, update, validate)
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: false      # 쿼리 로그 포맷 (정렬)
         show_sql: false        # 쿼리 로그 출력
 
