@@ -4,6 +4,7 @@ import com.smartcar.dororok.member.domain.entitiy.Gender;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class SignUpDto {
@@ -20,6 +21,7 @@ public class SignUpDto {
 
     private Boolean locationInfoAgreement;
 
+    private List<FavoriteGenreDto> favoriteGenreLists;
 
    // private Set<Genre> favoriteGenres;
 }
