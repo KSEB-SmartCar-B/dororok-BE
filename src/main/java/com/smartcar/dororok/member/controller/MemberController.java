@@ -43,10 +43,11 @@ public class MemberController {
     }
 
     @PostMapping("/sign-up")
-    @Operation(summary = "회원가입", description = "카카오 액세스 토큰 이용하여 회원가입 할 때 사용하는 API")
+    @Operation(summary = "회원가입", description = "카카오 액세스 토큰 이용하여 회원가입 할 때 사용하는 API, 장르 보낼 때 \"favoriteGenreLists\": [\"장르이름\", \"장르이름\", \"장르이름\"] 헝식으로 보내면 됨!")
     public ResponseEntity<JwtToken> signUp(@RequestBody SignUpDto signUpDto) {
 
         memberService.signUp(signUpDto);
+        memberService.addFavoriteGenres(signUpDto);
 
         return ResponseEntity.ok(memberService.signIn(signUpDto.getKakaoAccessToken()));
     }

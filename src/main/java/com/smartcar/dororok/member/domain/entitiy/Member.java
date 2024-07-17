@@ -25,6 +25,7 @@ public class Member implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -50,11 +51,6 @@ public class Member implements UserDetails {
     private String password;
 
     private String refreshToken;
-
-//    @ManyToMany// 나중에 관계 entity 만들어서 @ManyToOne 두개로 수정
-//    @Column(name = "favoirte_genres")
-//    private Set<Genre> favoriteGenres;
-
 
     public Member(Long id, Gender gender, String nickname, LocalDateTime birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, List<String> roles) {
         this.id = id;

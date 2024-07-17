@@ -2,13 +2,17 @@ package com.smartcar.dororok.member.service;
 
 import com.smartcar.dororok.global.auth.dto.JwtToken;
 import com.smartcar.dororok.global.auth.service.JwtTokenService;
-import com.smartcar.dororok.global.auth.utils.SecurityUtils;
 import com.smartcar.dororok.global.exception.CustomException;
 import com.smartcar.dororok.global.exception.ErrorCode;
 import com.smartcar.dororok.member.domain.dto.AccessTokenDto;
+import com.smartcar.dororok.member.domain.dto.FavoriteGenreDto;
 import com.smartcar.dororok.member.domain.dto.RefreshTokenDto;
 import com.smartcar.dororok.member.domain.dto.SignUpDto;
+import com.smartcar.dororok.member.domain.entitiy.FavoriteGenres;
+import com.smartcar.dororok.member.domain.entitiy.Genre;
 import com.smartcar.dororok.member.domain.entitiy.Member;
+import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
+import com.smartcar.dororok.member.repository.GenreRepository;
 import com.smartcar.dororok.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +32,13 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final GenreRepository genreRepository;
+    private final FavoriteGenresRepository favoriteGenresRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenService jwtTokenService;
     private final KakaoInfoService kakaoInfoService;
 
+    @Transactional
     public void signUp(SignUpDto signUpDto) {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
@@ -44,15 +51,29 @@ public class MemberService {
                 .locationInfoAgreement(signUpDto.getLocationInfoAgreement())
                 .roles(roles)
                 .build();
+
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public void addFavoriteGenres(SignUpDto signUpDto) {
+        List<FavoriteGenreDto> favoriteGenreNames = signUpDto.getFavoriteGenreLists();
+        for (FavoriteGenreDto favoriteGenreName : favoriteGenreNames) {
+            String genreName = favoriteGenreName.getName();
+            Genre genre = genreRepository.findByName(genreName);
+            if (genre == null) {
+                throw new CustomException(ErrorCode.BAD_REQUEST);
+            }
+
+            Member member = memberRepository.findByUsername(getUsername(signUpDto.getKakaoAccessToken())).orElse(null);
+            FavoriteGenres favoriteGenres = new FavoriteGenres(member, genre);
+            favoriteGenresRepository.save(favoriteGenres);
+        }
     }
 
     @Transactional
     public Boolean isSignedUp(String kakaoAccessToken) {
         Member member = memberRepository.findByUsername(getUsername(kakaoAccessToken)).orElse(null);
-//        if(member == null) {
-//            throw new CustomException(ErrorCode.NOT_EXIST_USER);
-//        }
         return member != null;
     }
 
@@ -107,7 +128,7 @@ public class MemberService {
         return jwtToken;
     }
 
-    public Long getId(String token) {
+    public Long getKakaoId(String token) {
         return kakaoInfoService.getUserProfileByToken(token).getId();
     }
 
