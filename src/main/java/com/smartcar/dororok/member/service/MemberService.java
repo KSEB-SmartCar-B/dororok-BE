@@ -97,6 +97,7 @@ public class MemberService {
         return jwtToken;
     }
 
+    @Transactional
     public AccessTokenDto refreshAccessToken(RefreshTokenDto refreshTokenDto) {
         Member member = memberRepository.findMemberByRefreshToken(refreshTokenDto.getRefreshToken()).orElse(null);
         if (member == null) {
@@ -128,10 +129,12 @@ public class MemberService {
         return jwtToken;
     }
 
+    @Transactional
     public Long getKakaoId(String token) {
         return kakaoInfoService.getUserProfileByToken(token).getId();
     }
 
+    @Transactional
     public String getUsername(String token) {
         return String.valueOf(kakaoInfoService.getUserProfileByToken(token).getId());
     }
