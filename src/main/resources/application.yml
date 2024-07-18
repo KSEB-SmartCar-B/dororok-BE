@@ -15,10 +15,8 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
-      maximum-pool-size: 100 # 최대 pool 크기
-      minimum-idle: 10 # 최소 pool 크기
-      idle-timeout: 600000 # 연결위한 최대 유후 시간
-      max-lifetime: 1800000 # 반납된 커넥션의 최대 수명
+      connection-timeout: 30000
+      maximum-pool-size: 10
 
   # JPA 설정
   jpa:
