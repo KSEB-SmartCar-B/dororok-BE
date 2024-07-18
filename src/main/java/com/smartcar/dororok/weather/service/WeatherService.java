@@ -15,7 +15,7 @@ import java.util.Date;
 @Service
 public class WeatherService {
 
-    private final String key = "4AJiRg5OOQbSyte5Yx/zAe1UkSuHX9ywJmMK0PF71rPWHdtjD013xz7iBehdUaK5K8qDrAaFWP0I8WaeSAkaYw==";
+    private final String key = System.getenv("WEATHER_KEY");
 
     private final GridService gridService;
 
