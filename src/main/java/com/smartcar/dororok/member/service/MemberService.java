@@ -49,6 +49,7 @@ public class MemberService {
                 .gender(signUpDto.getGender())
                 .privacyAgreement(signUpDto.getPrivacyAgreement())
                 .locationInfoAgreement(signUpDto.getLocationInfoAgreement())
+                .profileImageUrl(getProfileImageUrl(signUpDto.getKakaoAccessToken()))
                 .roles(roles)
                 .build();
 
@@ -129,14 +130,17 @@ public class MemberService {
         return jwtToken;
     }
 
-    @Transactional
-    public Long getKakaoId(String token) {
-        return kakaoInfoService.getUserProfileByToken(token).getId();
-    }
 
-    @Transactional
     public String getUsername(String token) {
         return String.valueOf(kakaoInfoService.getUserProfileByToken(token).getId());
     }
+
+    public String getProfileImageUrl(String token) {
+        return kakaoInfoService.getUserProfileByToken(token).getProfileImageUrl();
+    }
+
+
+
+
 }
 

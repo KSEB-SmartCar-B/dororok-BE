@@ -9,11 +9,21 @@ import java.util.Map;
 @NoArgsConstructor
 public class KakaoInfoDto {
     private Long id;
-    private String email;
+    private String profileImageUrl;
 
 
     public KakaoInfoDto(Map<String, Object> attributes) {
         this.id = Long.valueOf(attributes.get("id").toString());
-        this.email = attributes.get("email") != null ? attributes.get("email").toString() : "";
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        if(kakaoAccount != null) {
+            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+            if(profile != null) {
+                this.profileImageUrl = profile.get("profile_image_url").toString();
+            } else {
+                this.profileImageUrl = null;
+            }
+        } else {
+            this.profileImageUrl = null;
+        }
     }
 }
