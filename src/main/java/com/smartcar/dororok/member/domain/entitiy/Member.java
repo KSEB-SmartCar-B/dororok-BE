@@ -52,7 +52,10 @@ public class Member implements UserDetails {
 
     private String refreshToken;
 
-    public Member(Long id, Gender gender, String nickname, LocalDateTime birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, List<String> roles) {
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
+    public Member(Long id, Gender gender, String nickname, LocalDateTime birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, String profileImageUrl, List<String> roles) {
         this.id = id;
         this.gender = gender;
         this.nickname = nickname;
@@ -62,6 +65,7 @@ public class Member implements UserDetails {
         this.username = username;
         this.password = password;
         this.refreshToken = refreshToken;
+        this.profileImageUrl = profileImageUrl;
         this.roles = roles;
     }
 
