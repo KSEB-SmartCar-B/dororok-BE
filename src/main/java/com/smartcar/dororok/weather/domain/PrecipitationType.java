@@ -1,5 +1,6 @@
 package com.smartcar.dororok.weather.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum PrecipitationType {
@@ -26,6 +27,7 @@ public enum PrecipitationType {
         return description;
     }
 
+    @JsonCreator
     public static PrecipitationType fromCode(int code) {
         for (PrecipitationType type : PrecipitationType.values()) {
             if (type.code == code) {

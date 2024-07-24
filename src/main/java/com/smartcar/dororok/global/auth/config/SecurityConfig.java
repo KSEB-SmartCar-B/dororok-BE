@@ -35,7 +35,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**", "/spotify/**", "/weather/**","location/**")
+                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**", "/recommendation/**", "/weather/**")
                                 .permitAll()
                                 // 해당 API에 대해서는 모든 요청을 허가
                                 .requestMatchers("/members/sign-in","/members/sign-up","members/sign-in/test", "members/isSigned").permitAll()

@@ -1,5 +1,6 @@
 package com.smartcar.dororok.weather.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum SkyCondition {
@@ -24,6 +25,7 @@ public enum SkyCondition {
         return description;
     }
 
+    @JsonCreator
     public static SkyCondition fromCode(int code) {
         for (SkyCondition condition : SkyCondition.values()) {
             if (condition.code == code) {

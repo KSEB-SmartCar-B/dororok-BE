@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +36,7 @@ public class Member implements UserDetails {
     private String nickname;
 
     @Column(nullable = false)
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @Column(nullable = false)
     private Boolean privacyAgreement;
@@ -55,7 +55,7 @@ public class Member implements UserDetails {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    public Member(Long id, Gender gender, String nickname, LocalDateTime birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, String profileImageUrl, List<String> roles) {
+    public Member(Long id, Gender gender, String nickname, LocalDate birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, String profileImageUrl, List<String> roles) {
         this.id = id;
         this.gender = gender;
         this.nickname = nickname;
