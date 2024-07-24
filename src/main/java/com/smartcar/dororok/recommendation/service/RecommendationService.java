@@ -32,13 +32,14 @@ public class RecommendationService {
     private final LocationService locationService;
 
     public List<MusicRecommendationDto> getMusicRecommendations(String lat, String lng, MusicMode musicMode) {
-        Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).get();
-
-        List<String> genres = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
 
         GetWeatherDto weather = weatherService.getCurrentWeather(lat,lng);
 
         LocationDto location = locationService.getAddressFromCoordinates(lat, lng);
+
+        Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).get();
+
+        List<String> genres = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
 
         MusicRecommendationToDjangoDto dto = MusicRecommendationToDjangoDto.builder()
                 .genres(genres)
