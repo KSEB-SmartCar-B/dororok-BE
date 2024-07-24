@@ -1,4 +1,4 @@
-package com.smartcar.dororok.member.domain.entitiy;
+package com.smartcar.dororok.genre.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
