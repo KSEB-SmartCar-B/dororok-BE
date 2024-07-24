@@ -1,7 +1,6 @@
-package com.smartcar.dororok.recommendation.entity.dto;
+package com.smartcar.dororok.recommendation.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Builder;
 import lombok.Getter;
 

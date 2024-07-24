@@ -1,7 +1,7 @@
 package com.smartcar.dororok.recommendation.controller;
 
-import com.smartcar.dororok.recommendation.entity.MusicMode;
-import com.smartcar.dororok.recommendation.entity.dto.MusicRecommendationDto;
+import com.smartcar.dororok.recommendation.domain.MusicMode;
+import com.smartcar.dororok.recommendation.domain.dto.MusicRecommendationDto;
 import com.smartcar.dororok.recommendation.service.RecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

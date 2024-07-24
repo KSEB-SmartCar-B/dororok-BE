@@ -1,7 +1,6 @@
-package com.smartcar.dororok.recommendation.entity.dto;
+package com.smartcar.dororok.recommendation.domain.dto;
 
-import com.smartcar.dororok.member.domain.entitiy.Genre;
-import com.smartcar.dororok.recommendation.entity.MusicMode;
+import com.smartcar.dororok.recommendation.domain.MusicMode;
 import com.smartcar.dororok.weather.domain.PrecipitationType;
 import com.smartcar.dororok.weather.domain.SkyCondition;
 import lombok.Builder;
