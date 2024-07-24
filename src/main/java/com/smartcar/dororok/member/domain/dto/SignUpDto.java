@@ -3,7 +3,7 @@ package com.smartcar.dororok.member.domain.dto;
 import com.smartcar.dororok.member.domain.entitiy.Gender;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -15,7 +15,7 @@ public class SignUpDto {
 
     private Gender gender;
 
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     private Boolean privacyAgreement;
 

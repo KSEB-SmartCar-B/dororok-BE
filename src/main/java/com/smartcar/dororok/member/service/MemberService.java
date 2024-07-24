@@ -27,7 +27,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Slf4j
 public class MemberService {
 
@@ -38,7 +38,6 @@ public class MemberService {
     private final JwtTokenService jwtTokenService;
     private final KakaoInfoService kakaoInfoService;
 
-    @Transactional
     public void signUp(SignUpDto signUpDto) {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
@@ -56,7 +55,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    @Transactional
     public void addFavoriteGenres(SignUpDto signUpDto) {
         List<FavoriteGenreDto> favoriteGenreNames = signUpDto.getFavoriteGenreLists();
         for (FavoriteGenreDto favoriteGenreName : favoriteGenreNames) {
@@ -72,14 +70,13 @@ public class MemberService {
         }
     }
 
-    @Transactional
     public Boolean isSignedUp(String kakaoAccessToken) {
         Member member = memberRepository.findByUsername(getUsername(kakaoAccessToken)).orElse(null);
         return member != null;
     }
 
 
-    @Transactional
+
     public JwtToken signIn(String kakaoAccessToken) {
         // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
@@ -98,7 +95,6 @@ public class MemberService {
         return jwtToken;
     }
 
-    @Transactional
     public AccessTokenDto refreshAccessToken(RefreshTokenDto refreshTokenDto) {
         Member member = memberRepository.findMemberByRefreshToken(refreshTokenDto.getRefreshToken()).orElse(null);
         if (member == null) {
@@ -111,7 +107,6 @@ public class MemberService {
 
     }
 
-    @Transactional
     public JwtToken signInTest(String email) {
         // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
@@ -129,7 +124,6 @@ public class MemberService {
 
         return jwtToken;
     }
-
 
     public String getUsername(String token) {
         return String.valueOf(kakaoInfoService.getUserProfileByToken(token).getId());
