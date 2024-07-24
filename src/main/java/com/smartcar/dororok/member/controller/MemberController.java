@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -59,9 +61,15 @@ public class MemberController {
     }
 
     @GetMapping("/current-info")
-    @Operation(summary = "현재 개인 정보 조회", description = "현재 본인의 개인 정보(닉네임, 생년월일, 성별) 조회하는 API")
+    @Operation(summary = "현재 개인 정보 조회", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 조회하는 API")
     public ResponseEntity<CurrentInfoDto> currentInfo() {
         return ResponseEntity.ok(memberService.getCurrentInfo());
+    }
+
+    @GetMapping("/current-favorite-genre")
+    @Operation(summary = "현재 유저의 선호 장르 조회", description = "현재 로그인 한 유저의 선호 장르 조회하는 API")
+    public ResponseEntity<List<CurrentGenreDto>> getCurrentGenresNames() {
+        return ResponseEntity.ok(memberService.getCurrentGenreNames());
     }
 
     @GetMapping("/sign-in/test")

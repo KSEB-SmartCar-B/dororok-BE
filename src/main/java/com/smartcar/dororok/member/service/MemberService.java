@@ -116,6 +116,22 @@ public class MemberService {
                 .build();
     }
 
+    public List<CurrentGenreDto> getCurrentGenreNames() {
+        String currentUsername = SecurityUtils.getCurrentUsername();
+        Member member = memberRepository.findByUsername(currentUsername).orElse(null);
+
+        List<String> names = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
+
+        List<CurrentGenreDto> result = new ArrayList<>();
+
+        for (String s : names) {
+            result.add(CurrentGenreDto.builder()
+                    .name(s)
+                    .build());
+        }
+        return result;
+    }
+
     public JwtToken signInTest(String email) {
         // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
