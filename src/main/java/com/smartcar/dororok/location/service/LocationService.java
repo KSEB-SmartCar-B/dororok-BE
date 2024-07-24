@@ -31,8 +31,8 @@ public class LocationService {
                 .block();
     }
 
-    public LocationDto getAddressFromCoordinates(String x, String y) {
-        Map<String, Object> locationAttributesByCoordinates = getAddressFromCoordinatesAPI(x, y);
+    public LocationDto getAddressFromCoordinates(String lat, String lng) {
+        Map<String, Object> locationAttributesByCoordinates = getAddressFromCoordinatesAPI(lat, lng);
         List<Map<String, Object>> documents = (List<Map<String, Object>>) locationAttributesByCoordinates.get("documents");
         if (documents == null || documents.isEmpty()) {
             throw new CustomException(ErrorCode.BAD_REQUEST);
