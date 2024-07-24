@@ -1,4 +1,4 @@
-package com.smartcar.dororok.recommendation.entity;
+package com.smartcar.dororok.recommendation.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

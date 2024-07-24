@@ -1,6 +1,6 @@
 package com.smartcar.dororok.global.converter;
 
-import com.smartcar.dororok.recommendation.entity.MusicMode;
+import com.smartcar.dororok.recommendation.domain.MusicMode;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
