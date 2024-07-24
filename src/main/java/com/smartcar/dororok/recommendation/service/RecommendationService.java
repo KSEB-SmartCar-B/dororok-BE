@@ -35,7 +35,7 @@ public class RecommendationService {
 
         LocationDto location = locationService.getAddressFromCoordinates(lat, lng);
 
-        Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).get();
+        Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
 
         List<String> genres = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
 
