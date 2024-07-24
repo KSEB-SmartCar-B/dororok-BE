@@ -17,7 +17,7 @@ public class WeatherController {
 
 
     @GetMapping("/currnet-weather")
-    public GetWeatherDto getWeather(@RequestParam double lat, @RequestParam double lng) {
+    public GetWeatherDto getWeather(@RequestParam String lat, @RequestParam String lng) {
         return weatherService.getCurrentWeather(lat,lng);
     }
 }

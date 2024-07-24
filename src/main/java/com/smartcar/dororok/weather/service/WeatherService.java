@@ -26,8 +26,8 @@ public class WeatherService {
         this.restTemplate = restTemplate;
     }
 
-    public GetWeatherDto getCurrentWeather(double lat, double lng) {
-        LatXLngY grid = gridService.convertGRID_GPS(0,lat,lng);
+    public GetWeatherDto getCurrentWeather(String lat, String lng) {
+        LatXLngY grid = gridService.convertGRID_GPS(0,Long.parseLong(lat),Long.parseLong(lng));
         String nx = String.format("%.0f",grid.x);
         String ny= String.format("%.0f",grid.y);
         ApiDateTime dateTime = convertAPITime();
