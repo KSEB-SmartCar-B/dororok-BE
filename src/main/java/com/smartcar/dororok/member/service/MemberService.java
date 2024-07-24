@@ -2,17 +2,15 @@ package com.smartcar.dororok.member.service;
 
 import com.smartcar.dororok.global.auth.dto.JwtToken;
 import com.smartcar.dororok.global.auth.service.JwtTokenService;
+import com.smartcar.dororok.global.auth.utils.SecurityUtils;
 import com.smartcar.dororok.global.exception.CustomException;
 import com.smartcar.dororok.global.exception.ErrorCode;
-import com.smartcar.dororok.member.domain.dto.AccessTokenDto;
-import com.smartcar.dororok.member.domain.dto.FavoriteGenreDto;
-import com.smartcar.dororok.member.domain.dto.RefreshTokenDto;
-import com.smartcar.dororok.member.domain.dto.SignUpDto;
+import com.smartcar.dororok.member.domain.dto.*;
 import com.smartcar.dororok.member.domain.entitiy.FavoriteGenres;
-import com.smartcar.dororok.member.domain.entitiy.Genre;
+import com.smartcar.dororok.genre.domain.Genre;
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
-import com.smartcar.dororok.member.repository.GenreRepository;
+import com.smartcar.dororok.genre.repository.GenreRepository;
 import com.smartcar.dororok.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -105,6 +103,17 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         return jwtTokenService.refreshAccessToken(authentication);
 
+    }
+
+    public CurrentInfoDto getCurrentInfo() {
+        String currentUsername = SecurityUtils.getCurrentUsername();
+        Member member = memberRepository.findByUsername(currentUsername).orElse(null);
+
+        return CurrentInfoDto.builder()
+                .nickname(member.getNickname())
+                .birthday(member.getBirthday())
+                .gender(member.getGender())
+                .build();
     }
 
     public JwtToken signInTest(String email) {

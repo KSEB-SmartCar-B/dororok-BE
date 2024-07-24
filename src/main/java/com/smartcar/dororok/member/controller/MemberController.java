@@ -58,6 +58,12 @@ public class MemberController {
         return ResponseEntity.ok(memberService.refreshAccessToken(refreshTokenDto));
     }
 
+    @GetMapping("/current-info")
+    @Operation(summary = "현재 개인 정보 조회", description = "현재 본인의 개인 정보(닉네임, 생년월일, 성별) 조회하는 API")
+    public ResponseEntity<CurrentInfoDto> currentInfo() {
+        return ResponseEntity.ok(memberService.getCurrentInfo());
+    }
+
     @GetMapping("/sign-in/test")
     public JwtToken signInTest(@RequestParam String email) {
         return memberService.signInTest(email);
