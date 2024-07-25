@@ -60,17 +60,26 @@ public class MemberController {
         return ResponseEntity.ok(memberService.refreshAccessToken(refreshTokenDto));
     }
 
-    @GetMapping("/current-info")
-    @Operation(summary = "현재 유저의개인 정보 조회", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 조회하는 API")
-    public ResponseEntity<CurrentInfoDto> currentInfo() {
-        return ResponseEntity.ok(memberService.getCurrentInfo());
+    @GetMapping("/info")
+    @Operation(summary = "현재 유저의 개인 정보 조회", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 조회하는 API")
+    public ResponseEntity<InfoDto> getInfo() {
+        return ResponseEntity.ok(memberService.getInfo());
     }
 
-    @GetMapping("/current-favorite-genre")
+    @GetMapping("/favorite-genre")
     @Operation(summary = "현재 유저의 선호 장르 조회", description = "현재 로그인 한 유저의 선호 장르 조회하는 API")
-    public ResponseEntity<List<CurrentGenreDto>> getCurrentGenresNames() {
-        return ResponseEntity.ok(memberService.getCurrentGenreNames());
+    public ResponseEntity<List<FavoriteGenreDto>> getFavoriteGenreNames() {
+        return ResponseEntity.ok(memberService.getFavoriteGenreNames());
     }
+
+    @PatchMapping("/info")
+    @Operation(summary = "현재 유저의 개인 정보 수정", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 수정하는 API")
+    public ResponseEntity<Void> patchInfo(@RequestBody InfoDto infoDto) {
+        memberService.patchInfo(infoDto);
+        return ResponseEntity.ok().build();
+    }
+
+
 
     @GetMapping("/sign-in/test")
     public JwtToken signInTest(@RequestParam String email) {

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class CurrentInfoDto {
+public class InfoDto {
     private String nickname;
     private LocalDate birthday;
     private Gender gender;

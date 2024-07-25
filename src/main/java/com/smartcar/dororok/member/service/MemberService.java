@@ -105,31 +105,40 @@ public class MemberService {
 
     }
 
-    public CurrentInfoDto getCurrentInfo() {
+    public InfoDto getInfo() {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
-        return CurrentInfoDto.builder()
+        return InfoDto.builder()
                 .nickname(member.getNickname())
                 .birthday(member.getBirthday())
                 .gender(member.getGender())
                 .build();
     }
 
-    public List<CurrentGenreDto> getCurrentGenreNames() {
+    public List<FavoriteGenreDto> getFavoriteGenreNames() {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
         List<String> names = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
 
-        List<CurrentGenreDto> result = new ArrayList<>();
+        List<FavoriteGenreDto> result = new ArrayList<>();
 
         for (String s : names) {
-            result.add(CurrentGenreDto.builder()
+            result.add(FavoriteGenreDto.builder()
                     .name(s)
                     .build());
         }
         return result;
+    }
+
+    public void patchInfo(InfoDto infoDto) {
+        String currentUsername = SecurityUtils.getCurrentUsername();
+        Member member = memberRepository.findByUsername(currentUsername).orElse(null);
+
+        member.setGender(infoDto.getGender());
+        member.setNickname(infoDto.getNickname());
+        member.setBirthday(infoDto.getBirthday());
     }
 
     public JwtToken signInTest(String email) {
