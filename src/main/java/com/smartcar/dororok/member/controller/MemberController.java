@@ -74,8 +74,8 @@ public class MemberController {
 
     @PatchMapping("/info")
     @Operation(summary = "현재 유저의 개인 정보 수정", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 수정하는 API")
-    public ResponseEntity<Void> patchInfo(@RequestBody InfoDto infoDto) {
-        memberService.patchInfo(infoDto);
+    public ResponseEntity<Void> patchInfo(@RequestBody PatchInfoDto patchInfoDto) {
+        memberService.patchInfo(patchInfoDto);
         return ResponseEntity.ok().build();
     }
 

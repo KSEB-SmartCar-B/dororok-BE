@@ -112,6 +112,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .birthday(member.getBirthday())
                 .gender(member.getGender())
+                .profileImgUrl(member.getProfileImageUrl())
                 .build();
     }
 
@@ -133,7 +134,7 @@ public class MemberService {
         return result;
     }
 
-    public void patchInfo(InfoDto infoDto) {
+    public void patchInfo(PatchInfoDto infoDto) {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
