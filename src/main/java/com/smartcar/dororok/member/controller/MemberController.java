@@ -70,7 +70,7 @@ public class MemberController {
     @Operation(summary = "현재 유저의 선호 장르 조회", description = "현재 로그인 한 유저의 선호 장르 조회하는 API")
     public ResponseEntity<FavoriteGenreList> getFavoriteGenreNames() {
         return ResponseEntity.ok(FavoriteGenreList.builder()
-                        .names(memberService.getFavoriteGenreNames())
+                        .favoriteGenres(memberService.getFavoriteGenreNames())
                         .build());
     }
 

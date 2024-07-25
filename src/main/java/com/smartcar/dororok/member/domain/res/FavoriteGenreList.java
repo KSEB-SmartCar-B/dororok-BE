@@ -9,12 +9,12 @@ import java.util.List;
 @Getter
 @Builder
 public class FavoriteGenreList {
-    private List<FavoriteGenreDto> names;
+    private List<FavoriteGenreDto> favoriteGenres;
 
     public FavoriteGenreList() {
     }
 
-    public FavoriteGenreList(List<FavoriteGenreDto> names) {
-        this.names = names;
+    public FavoriteGenreList(List<FavoriteGenreDto> favoriteGenres) {
+        this.favoriteGenres = favoriteGenres;
     }
 }
