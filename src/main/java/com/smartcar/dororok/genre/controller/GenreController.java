@@ -1,5 +1,6 @@
 package com.smartcar.dororok.genre.controller;
 
+import com.smartcar.dororok.genre.domain.res.AllGenreList;
 import com.smartcar.dororok.genre.repository.GenreRepository;
 import com.smartcar.dororok.genre.service.GenreService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +23,10 @@ public class GenreController {
 
     @GetMapping("/name-list")
     @Operation(summary = "모든 장르 이름 리스트", description = "모든 장르 이름 리스트 반환하는 API")
-    public ResponseEntity<List<String>> nameList() {
-        return ResponseEntity.ok(genreService.findAllGenreNames());
+    public ResponseEntity<AllGenreList> nameList() {
+        return ResponseEntity.ok(AllGenreList.builder()
+                .names(genreService.findAllGenreNames())
+                .build());
     }
 
 }

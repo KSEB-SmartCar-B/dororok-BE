@@ -2,6 +2,8 @@ package com.smartcar.dororok.member.controller;
 
 import com.smartcar.dororok.global.auth.dto.JwtToken;
 import com.smartcar.dororok.member.domain.dto.*;
+import com.smartcar.dororok.member.domain.req.PatchInfoReq;
+import com.smartcar.dororok.member.domain.res.FavoriteGenreList;
 import com.smartcar.dororok.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -68,8 +68,10 @@ public class MemberController {
 
     @GetMapping("/favorite-genre")
     @Operation(summary = "현재 유저의 선호 장르 조회", description = "현재 로그인 한 유저의 선호 장르 조회하는 API")
-    public ResponseEntity<List<FavoriteGenreDto>> getFavoriteGenreNames() {
-        return ResponseEntity.ok(memberService.getFavoriteGenreNames());
+    public ResponseEntity<FavoriteGenreList> getFavoriteGenreNames() {
+        return ResponseEntity.ok(FavoriteGenreList.builder()
+                        .names(memberService.getFavoriteGenreNames())
+                        .build());
     }
 
     @PatchMapping("/info")
@@ -81,8 +83,8 @@ public class MemberController {
 
     @PatchMapping("/favorite-genre")
     @Operation(summary = "현재 유저의 선호 장르 수정", description = "현재 로그인 한 유저의 선호 장르 수정하는 API")
-    public ResponseEntity<Void> patchFavoriteGenres(@RequestBody List<FavoriteGenreDto> favoriteGenreDtos) {
-        memberService.patchFavoriteGenres(favoriteGenreDtos);
+    public ResponseEntity<Void> patchFavoriteGenres(@RequestBody PatchInfoReq dto) {
+        memberService.patchFavoriteGenres(dto.getFavoriteGenres());
         return ResponseEntity.ok().build();
     }
 
