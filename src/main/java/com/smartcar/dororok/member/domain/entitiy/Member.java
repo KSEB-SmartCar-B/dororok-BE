@@ -99,5 +99,17 @@ public class Member implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 }
 
