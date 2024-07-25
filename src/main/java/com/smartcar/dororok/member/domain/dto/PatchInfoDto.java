@@ -8,9 +8,8 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class InfoDto {
+public class PatchInfoDto {
     private String nickname;
     private LocalDate birthday;
     private Gender gender;
-    private String profileImgUrl;
 }

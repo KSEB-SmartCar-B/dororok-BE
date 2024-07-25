@@ -1,10 +1,7 @@
 package com.smartcar.dororok.member.domain.entitiy;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member implements UserDetails {
 
     @Id
@@ -55,19 +53,22 @@ public class Member implements UserDetails {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    public Member(Long id, Gender gender, String nickname, LocalDate birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, String profileImageUrl, List<String> roles) {
-        this.id = id;
-        this.gender = gender;
-        this.nickname = nickname;
-        this.birthday = birthday;
-        this.privacyAgreement = privacyAgreement;
-        this.locationInfoAgreement = locationInfoAgreement;
-        this.username = username;
-        this.password = password;
-        this.refreshToken = refreshToken;
-        this.profileImageUrl = profileImageUrl;
-        this.roles = roles;
-    }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteGenres> favoriteGenres;
+
+//    public Member(Long id, Gender gender, String nickname, LocalDate birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, String profileImageUrl, List<String> roles) {
+//        this.id = id;
+//        this.gender = gender;
+//        this.nickname = nickname;
+//        this.birthday = birthday;
+//        this.privacyAgreement = privacyAgreement;
+//        this.locationInfoAgreement = locationInfoAgreement;
+//        this.username = username;
+//        this.password = password;
+//        this.refreshToken = refreshToken;
+//        this.profileImageUrl = profileImageUrl;
+//        this.roles = roles;
+//    }
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

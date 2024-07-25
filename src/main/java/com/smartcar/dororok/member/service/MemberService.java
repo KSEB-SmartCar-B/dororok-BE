@@ -55,14 +55,13 @@ public class MemberService {
 
     public void addFavoriteGenres(SignUpDto signUpDto) {
         List<FavoriteGenreDto> favoriteGenreNames = signUpDto.getFavoriteGenreLists();
+        Member member = memberRepository.findByUsername(getUsername(signUpDto.getKakaoAccessToken())).orElse(null);
         for (FavoriteGenreDto favoriteGenreName : favoriteGenreNames) {
             String genreName = favoriteGenreName.getName();
             Genre genre = genreRepository.findByName(genreName);
             if (genre == null) {
                 throw new CustomException(ErrorCode.BAD_REQUEST);
             }
-
-            Member member = memberRepository.findByUsername(getUsername(signUpDto.getKakaoAccessToken())).orElse(null);
             FavoriteGenres favoriteGenres = new FavoriteGenres(member, genre);
             favoriteGenresRepository.save(favoriteGenres);
         }
@@ -113,6 +112,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .birthday(member.getBirthday())
                 .gender(member.getGender())
+                .profileImgUrl(member.getProfileImageUrl())
                 .build();
     }
 
@@ -120,19 +120,21 @@ public class MemberService {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
-        List<String> names = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
+        List<FavoriteGenres> names = member.getFavoriteGenres();
 
         List<FavoriteGenreDto> result = new ArrayList<>();
 
-        for (String s : names) {
+        for (FavoriteGenres favoriteGenre : names) {
             result.add(FavoriteGenreDto.builder()
-                    .name(s)
-                    .build());
+                            .name(favoriteGenre.getGenre().getName())
+                            .build()
+                    );
         }
+
         return result;
     }
 
-    public void patchInfo(InfoDto infoDto) {
+    public void patchInfo(PatchInfoDto infoDto) {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
