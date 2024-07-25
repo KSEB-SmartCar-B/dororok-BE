@@ -143,6 +143,24 @@ public class MemberService {
         member.setBirthday(infoDto.getBirthday());
     }
 
+    public void patchFavoriteGenres(List<FavoriteGenreDto> dto) {
+        String currentUsername = SecurityUtils.getCurrentUsername();
+        Member member = memberRepository.findByUsername(currentUsername).orElse(null);
+
+        member.getFavoriteGenres().clear();
+
+        for (FavoriteGenreDto favoriteGenreName : dto) {
+            String genreName = favoriteGenreName.getName();
+            Genre genre = genreRepository.findByName(genreName);
+            if (genre == null) {
+                throw new CustomException(ErrorCode.BAD_REQUEST);
+            }
+            FavoriteGenres favoriteGenres = new FavoriteGenres(member, genre);
+            favoriteGenresRepository.save(favoriteGenres);
+        }
+
+    }
+
     public JwtToken signInTest(String email) {
         // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false

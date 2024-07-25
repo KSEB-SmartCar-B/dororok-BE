@@ -79,7 +79,12 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-
+    @PatchMapping("/favorite-genre")
+    @Operation(summary = "현재 유저의 선호 장르 수정", description = "현재 로그인 한 유저의 선호 장르 수정하는 API")
+    public ResponseEntity<Void> patchFavoriteGenres(@RequestBody List<FavoriteGenreDto> favoriteGenreDtos) {
+        memberService.patchFavoriteGenres(favoriteGenreDtos);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/sign-in/test")
     public JwtToken signInTest(@RequestParam String email) {
