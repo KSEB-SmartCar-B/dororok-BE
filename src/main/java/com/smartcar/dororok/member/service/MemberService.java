@@ -161,22 +161,25 @@ public class MemberService {
     }
 
 
-    public void patchFavoriteGenres(List<FavoriteGenreDto> dto) {
+    public boolean patchFavoriteGenres(List<FavoriteGenreDto> dto) {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
         member.getFavoriteGenres().clear();
 
+        boolean isUpdated = false;
+
         for (FavoriteGenreDto favoriteGenreName : dto) {
             String genreName = favoriteGenreName.getName();
             Genre genre = genreRepository.findByName(genreName);
             if (genre == null) {
-                throw new CustomException(ErrorCode.BAD_REQUEST);
+                isUpdated = false;
             }
             FavoriteGenres favoriteGenres = new FavoriteGenres(member, genre);
             favoriteGenresRepository.save(favoriteGenres);
+            isUpdated = true;
         }
-
+        return isUpdated;
     }
 
     public JwtToken signInTest(String email) {

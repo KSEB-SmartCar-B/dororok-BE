@@ -4,6 +4,7 @@ import com.smartcar.dororok.global.auth.dto.JwtToken;
 import com.smartcar.dororok.member.domain.dto.*;
 import com.smartcar.dororok.member.domain.req.PatchInfoReq;
 import com.smartcar.dororok.member.domain.res.FavoriteGenreList;
+import com.smartcar.dororok.member.domain.res.UpdateResultDto;
 import com.smartcar.dororok.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -76,19 +77,30 @@ public class MemberController {
 
     @PatchMapping("/info")
     @Operation(summary = "현재 유저의 개인 정보 수정", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 수정하는 API")
-    public ResponseEntity<String> patchInfo(@RequestBody PatchInfoDto patchInfoDto) {
+    public ResponseEntity<UpdateResultDto> patchInfo(@RequestBody PatchInfoDto patchInfoDto) {
         boolean isUpdated = memberService.patchInfo(patchInfoDto);
         if(!isUpdated) {
-            return ResponseEntity.ok("Failed");
+            return ResponseEntity.ok(UpdateResultDto.builder()
+                            .result("Failed")
+                    .build());
         }
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok(UpdateResultDto.builder()
+                .result("Success")
+                .build());
     }
 
     @PatchMapping("/favorite-genre")
     @Operation(summary = "현재 유저의 선호 장르 수정", description = "현재 로그인 한 유저의 선호 장르 수정하는 API")
-    public ResponseEntity<String> patchFavoriteGenres(@RequestBody PatchInfoReq dto) {
-        memberService.patchFavoriteGenres(dto.getFavoriteGenres());
-        return ResponseEntity.ok("Success");
+    public ResponseEntity<UpdateResultDto> patchFavoriteGenres(@RequestBody PatchInfoReq dto) {
+        boolean isUpdated = memberService.patchFavoriteGenres(dto.getFavoriteGenres());
+        if(!isUpdated){
+            return ResponseEntity.ok(UpdateResultDto.builder()
+                    .result("Failed")
+                    .build());
+        }
+        return ResponseEntity.ok(UpdateResultDto.builder()
+                                    .result("Success")
+                                    .build());
     }
 
     @GetMapping("/sign-in/test")
