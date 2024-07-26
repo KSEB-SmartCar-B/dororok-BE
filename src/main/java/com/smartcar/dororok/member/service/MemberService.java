@@ -134,14 +134,32 @@ public class MemberService {
         return result;
     }
 
-    public void patchInfo(PatchInfoDto infoDto) {
+    public boolean patchInfo(PatchInfoDto infoDto) {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
-        member.setGender(infoDto.getGender());
-        member.setNickname(infoDto.getNickname());
-        member.setBirthday(infoDto.getBirthday());
+        boolean isUpdated = false;
+
+        if (infoDto.getGender() != null && !infoDto.getGender().equals(member.getGender())) {
+            member.setGender(infoDto.getGender());
+            isUpdated = true;
+        }
+        if (infoDto.getNickname() != null && !infoDto.getNickname().equals(member.getNickname())) {
+            member.setNickname(infoDto.getNickname());
+            isUpdated = true;
+        }
+        if (infoDto.getBirthday() != null && !infoDto.getBirthday().equals(member.getBirthday())) {
+            member.setBirthday(infoDto.getBirthday());
+            isUpdated = true;
+        }
+
+        if (isUpdated) {
+            memberRepository.flush();
+        }
+
+        return isUpdated;
     }
+
 
     public void patchFavoriteGenres(List<FavoriteGenreDto> dto) {
         String currentUsername = SecurityUtils.getCurrentUsername();

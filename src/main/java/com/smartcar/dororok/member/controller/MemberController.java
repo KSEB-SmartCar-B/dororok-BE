@@ -76,16 +76,19 @@ public class MemberController {
 
     @PatchMapping("/info")
     @Operation(summary = "현재 유저의 개인 정보 수정", description = "현재 로그인 한 유져의 개인 정보(닉네임, 생년월일, 성별) 수정하는 API")
-    public ResponseEntity<Void> patchInfo(@RequestBody PatchInfoDto patchInfoDto) {
-        memberService.patchInfo(patchInfoDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> patchInfo(@RequestBody PatchInfoDto patchInfoDto) {
+        boolean isUpdated = memberService.patchInfo(patchInfoDto);
+        if(!isUpdated) {
+            return ResponseEntity.ok("Failed");
+        }
+        return ResponseEntity.ok("Success");
     }
 
     @PatchMapping("/favorite-genre")
     @Operation(summary = "현재 유저의 선호 장르 수정", description = "현재 로그인 한 유저의 선호 장르 수정하는 API")
-    public ResponseEntity<Void> patchFavoriteGenres(@RequestBody PatchInfoReq dto) {
+    public ResponseEntity<String> patchFavoriteGenres(@RequestBody PatchInfoReq dto) {
         memberService.patchFavoriteGenres(dto.getFavoriteGenres());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Success");
     }
 
     @GetMapping("/sign-in/test")
