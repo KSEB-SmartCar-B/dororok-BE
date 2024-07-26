@@ -7,11 +7,5 @@ import lombok.Getter;
 @Builder
 public class GenreDto {
     private String name;
-
-    public GenreDto() {
-    }
-
-    public GenreDto(String name) {
-        this.name = name;
-    }
+    private String imageUrl;
 }

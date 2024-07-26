@@ -17,12 +17,15 @@ public class GenreService {
 
     private final GenreRepository genreRepository;
 
+    private final String basicURL = System.getenv("IMAGE_BASIC_URL");
+
     public List<GenreDto> findAllGenreNames() {
         List<Genre> genres = genreRepository.findAll();
         List<GenreDto> result = new ArrayList<>();
         for (Genre genre : genres) {
             result.add(GenreDto.builder()
                     .name(genre.getName())
+                    .imageUrl(basicURL+genre.getImageUrl())
                     .build());
         }
         return result;
