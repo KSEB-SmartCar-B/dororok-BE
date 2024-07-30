@@ -41,6 +41,12 @@ spring:
       #paths-to-match:
         #- /api/** # swagger-ui에 표시할 api의 엔드포인트 패턴
 
+ #redis 설정
+  redis:
+    data:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
 jwt:
   secret: 18b88ec0b2a5b0d2dafe5113d316a743bb7872269f6f9b106948c968cf0051fa
   access:
