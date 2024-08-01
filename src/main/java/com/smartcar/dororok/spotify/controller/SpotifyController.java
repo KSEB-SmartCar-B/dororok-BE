@@ -31,7 +31,7 @@ public class SpotifyController {
     }
 
 
-    @GetMapping("/search")
+    //@GetMapping("/search")
     public ResponseEntity<String> search(@RequestParam String query, @RequestParam String type) {
         String searchEndpoint = "https://api.spotify.com/v1/search";
         String url = searchEndpoint + "?type=" + type + "&q=" + query;
@@ -52,7 +52,7 @@ public class SpotifyController {
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
-    @GetMapping("/new-token")
+    //@GetMapping("/new-token")
     @Operation(summary = "액세스 토큰 재발급", description = "액세스 토큰이 만료됐을 때, 재발급")
     public void newToken() {
         spotifyAccessToken = spotifyConfig.spotifyAccessToken();

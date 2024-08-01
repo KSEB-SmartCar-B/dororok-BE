@@ -33,7 +33,7 @@ public class RecommendationService {
 
         GetWeatherDto weather = weatherService.getCurrentWeather(lat,lng);
 
-        LocationDto location = locationService.getAddressFromCoordinates(lat, lng);
+        LocationDto location = locationService.getProvinceAndCityName(locationService.getAddressFromCoordinates(lat, lng));
 
         Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
 
