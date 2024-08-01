@@ -20,8 +20,9 @@ public class SearchController {
 
     @PostMapping
     @Operation(summary = "최근 검색어 추가", description = "최근 검색어 목록에 추가하는 API")
-    public void addSearchLog(@RequestParam String searchLog) {
+    public ResponseEntity<String> addSearchLog(@RequestParam String searchLog) {
         searchService.addSearchLog(searchLog);
+        return ResponseEntity.ok("success");
     }
 
     @GetMapping
@@ -34,7 +35,8 @@ public class SearchController {
 
     @DeleteMapping
     @Operation(summary = "최근 검색어 삭제", description = "최근 검색어 목록에서 삭제하는 API")
-    public void deleteSearchLog(@RequestParam String searchLog) {
+    public ResponseEntity<String> deleteSearchLog(@RequestParam String searchLog) {
         searchService.deleteSearchLog(searchLog);
+        return ResponseEntity.ok("success");
     }
 }
