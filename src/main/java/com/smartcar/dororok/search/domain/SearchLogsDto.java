@@ -17,4 +17,9 @@ public class SearchLogsDto {
     public SearchLogsDto(List<String> searchLogs) {
         this.searchLogs = searchLogs;
     }
+
+    @Getter
+    public static class SearchPostDto {
+        private String searchLog;
+    }
 }

@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/search")
@@ -20,8 +18,8 @@ public class SearchController {
 
     @PostMapping
     @Operation(summary = "최근 검색어 추가", description = "최근 검색어 목록에 추가하는 API")
-    public ResponseEntity<String> addSearchLog(@RequestParam String searchLog) {
-        searchService.addSearchLog(searchLog);
+    public ResponseEntity<String> addSearchLog(@RequestBody SearchLogsDto.SearchPostDto dto) {
+        searchService.addSearchLog(dto.getSearchLog());
         return ResponseEntity.ok("success");
     }
 
