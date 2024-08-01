@@ -1,6 +1,7 @@
 package com.smartcar.dororok.search.controller;
 
 import com.smartcar.dororok.search.domain.SearchLogsDto;
+import com.smartcar.dororok.search.domain.SearchPostDto;
 import com.smartcar.dororok.search.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +19,7 @@ public class SearchController {
 
     @PostMapping
     @Operation(summary = "최근 검색어 추가", description = "최근 검색어 목록에 추가하는 API")
-    public ResponseEntity<String> addSearchLog(@RequestBody SearchLogsDto.SearchPostDto dto) {
+    public ResponseEntity<String> addSearchLog(@RequestBody SearchPostDto dto) {
         searchService.addSearchLog(dto.getSearchLog());
         return ResponseEntity.ok("success");
     }

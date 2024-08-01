@@ -18,8 +18,4 @@ public class SearchLogsDto {
         this.searchLogs = searchLogs;
     }
 
-    @Getter
-    public static class SearchPostDto {
-        private String searchLog;
-    }
 }
