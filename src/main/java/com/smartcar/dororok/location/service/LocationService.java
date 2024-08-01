@@ -31,18 +31,22 @@ public class LocationService {
                 .block();
     }
 
-    public LocationDto getAddressFromCoordinates(String lat, String lng) {
+    public LocationInfoDto getAddressFromCoordinates(String lat, String lng) {
         Map<String, Object> locationAttributesByCoordinates = getAddressFromCoordinatesAPI(lat, lng);
         List<Map<String, Object>> documents = (List<Map<String, Object>>) locationAttributesByCoordinates.get("documents");
         if (documents == null || documents.isEmpty()) {
             throw new CustomException(ErrorCode.BAD_REQUEST);
         }
         LocationInfoDto locationInfoDto = new LocationInfoDto(documents.get(0));
-        LocationDto locationDto = LocationDto.builder()
-                .cityName(locationInfoDto.getCityName())
-                .provinceName(locationInfoDto.getProvinceName())
-                .build();
 
-        return locationDto;
+
+        return locationInfoDto;
+    }
+
+    public LocationDto getProvinceAndCityName(LocationInfoDto dto) {
+        return LocationDto.builder()
+                .provinceName(dto.getRegion1depthName())
+                .cityName(dto.getRegion2depthName())
+                .build();
     }
 }
