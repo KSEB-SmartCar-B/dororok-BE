@@ -33,7 +33,7 @@ public class SearchController {
                 .build());
     }
 
-    @DeleteMapping
+    @PostMapping("/delete")
     @Operation(summary = "최근 검색어 삭제", description = "최근 검색어 목록에서 삭제하는 API")
     public ResponseEntity<SearchResDto> deleteSearchLog(@RequestBody SearchPostDto dto) {
         searchService.deleteSearchLog(dto.getSearchLog());
