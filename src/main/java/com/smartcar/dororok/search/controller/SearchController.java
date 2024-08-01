@@ -2,6 +2,7 @@ package com.smartcar.dororok.search.controller;
 
 import com.smartcar.dororok.search.domain.SearchLogsDto;
 import com.smartcar.dororok.search.domain.SearchPostDto;
+import com.smartcar.dororok.search.domain.SearchResDto;
 import com.smartcar.dororok.search.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,9 +20,9 @@ public class SearchController {
 
     @PostMapping
     @Operation(summary = "최근 검색어 추가", description = "최근 검색어 목록에 추가하는 API")
-    public ResponseEntity<String> addSearchLog(@RequestBody SearchPostDto dto) {
+    public ResponseEntity<SearchResDto> addSearchLog(@RequestBody SearchPostDto dto) {
         searchService.addSearchLog(dto.getSearchLog());
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(new SearchResDto("success"));
     }
 
     @GetMapping
@@ -34,8 +35,8 @@ public class SearchController {
 
     @DeleteMapping
     @Operation(summary = "최근 검색어 삭제", description = "최근 검색어 목록에서 삭제하는 API")
-    public ResponseEntity<String> deleteSearchLog(@RequestBody SearchPostDto dto) {
+    public ResponseEntity<SearchResDto> deleteSearchLog(@RequestBody SearchPostDto dto) {
         searchService.deleteSearchLog(dto.getSearchLog());
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(new SearchResDto("success"));
     }
 }
