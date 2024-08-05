@@ -15,7 +15,7 @@ import java.util.Date;
 @Service
 public class WeatherService {
 
-    private final String key = System.getenv("WEATHER_KEY");
+    private final String key = System.getenv("OPENAPI_KEY");
 
     private final GridService gridService;
 
