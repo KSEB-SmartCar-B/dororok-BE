@@ -43,7 +43,7 @@ public class DestinationService {
 
     }
 
-    private AgeRange getAgeRange(LocalDate birthDate) {
+    public AgeRange getAgeRange(LocalDate birthDate) {
         int age = calculateAge(birthDate, LocalDate.now());
         return AgeRange.fromAge(age);
     }
