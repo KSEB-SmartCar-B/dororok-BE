@@ -27,7 +27,7 @@ public class WeatherService {
     }
 
     public GetWeatherDto getCurrentWeather(String lat, String lng) {
-        LatXLngY grid = gridService.convertGRID_GPS(0,Long.parseLong(lat),Long.parseLong(lng));
+        LatXLngY grid = gridService.convertGRID_GPS(0,Double.parseDouble(lat),Double.parseDouble(lng));
         String nx = String.format("%.0f",grid.x);
         String ny= String.format("%.0f",grid.y);
         ApiDateTime dateTime = convertAPITime();
