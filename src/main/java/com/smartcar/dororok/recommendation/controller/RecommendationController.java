@@ -1,8 +1,9 @@
 package com.smartcar.dororok.recommendation.controller;
 
 import com.smartcar.dororok.recommendation.domain.MusicMode;
-import com.smartcar.dororok.recommendation.domain.dto.MusicRecommendationDto;
+import com.smartcar.dororok.recommendation.domain.dto.PlaceDetailDto;
 import com.smartcar.dororok.recommendation.domain.res.MusicRecommendationRes;
+import com.smartcar.dororok.recommendation.domain.res.PlaceRecommendationRes;
 import com.smartcar.dororok.recommendation.service.RecommendationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +28,23 @@ public class RecommendationController {
         return ResponseEntity.ok(MusicRecommendationRes.builder()
                 .lists(recommendationService.getMusicRecommendations(lat, lng, musicMode))
                 .build());
+    }
+
+    @Operation(summary = "내 주변 관광지 추천", description = "현재 위도, 경도 넣으면 TourAPI에서 제공하는 5개 관광지 정보 제공")
+    @GetMapping("/places/nearby")
+    public ResponseEntity<PlaceRecommendationRes> getNearByPlacesRecommendation(@RequestParam String lat, @RequestParam String lng) {
+        return ResponseEntity.ok(new PlaceRecommendationRes(recommendationService.getNearByPlacesRecommendation(lat, lng)));
+    }
+
+    @Operation(summary = "관광지 추천", description = "현재 위도, 경도 넣으면 장고에서 추천 알고리즘 돌려 지역 선정하고, TourAPI에서 제공하는 5개 관광지 정보 제공")
+    @GetMapping("/places")
+    public ResponseEntity<Void> getPlacesRecommendation(@RequestParam String lat, @RequestParam String lng) {
+        return ResponseEntity.ok(null);
+    }
+
+    @Operation(summary = "관광지 상세 정보", description = "관광지의 contentId 전달하면 관광지의 상세 정보 제공")
+    @GetMapping("/place/detail")
+    public ResponseEntity<PlaceDetailDto> getPlaceDetail(@RequestParam String contentId) {
+        return ResponseEntity.ok(recommendationService.getPlaceDetail(contentId));
     }
 }
