@@ -2,7 +2,6 @@ package com.smartcar.dororok.location.service;
 
 import com.smartcar.dororok.global.exception.CustomException;
 import com.smartcar.dororok.global.exception.ErrorCode;
-import com.smartcar.dororok.location.dto.LocationDto;
 import com.smartcar.dororok.location.dto.LocationInfoDto;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
@@ -43,10 +42,4 @@ public class LocationService {
         return locationInfoDto;
     }
 
-    public LocationDto getProvinceAndCityName(LocationInfoDto dto) {
-        return LocationDto.builder()
-                .provinceName(dto.getRegion1depthName())
-                .cityName(dto.getRegion2depthName())
-                .build();
-    }
 }

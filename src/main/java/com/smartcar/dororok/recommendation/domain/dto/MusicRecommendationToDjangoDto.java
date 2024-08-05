@@ -15,8 +15,9 @@ public class MusicRecommendationToDjangoDto { //프론트에서 요청받아서 
     private List<String> genres;
     private String lat;
     private String lng;
-    private String province; //도 (광역시는 여기에 ~시)
-    private String city; //시 (광역시는 여기에 ~구)
+    private String region1depthName;//도 (광역시는 여기에 ~시)
+    private String region2depthName;//시 (광역시는 여기에 ~구)
+    private String region3depthName;
     private SkyCondition skyCondition; //하늘 상태
     private PrecipitationType precipitationType; //강수 상태
     private MusicMode musicMode; //선택한 음악 모드

@@ -13,4 +13,7 @@ public class MusicRecommendationDto {
 
     @JsonProperty(value = "PLAY_TIME")
     private Long playTime;
+
+    @JsonProperty(value = "TRACK_IMAGE")
+    private String trackImage;
 }
