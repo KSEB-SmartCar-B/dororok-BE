@@ -1,6 +1,5 @@
 package com.smartcar.dororok.location.controller;
 
-import com.smartcar.dororok.location.dto.LocationDto;
 import com.smartcar.dororok.location.dto.LocationInfoDto;
 import com.smartcar.dororok.location.service.LocationService;
 import lombok.RequiredArgsConstructor;
