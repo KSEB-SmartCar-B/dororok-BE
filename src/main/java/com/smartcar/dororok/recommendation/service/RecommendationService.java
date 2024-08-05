@@ -1,7 +1,7 @@
 package com.smartcar.dororok.recommendation.service;
 
 import com.smartcar.dororok.global.auth.utils.SecurityUtils;
-import com.smartcar.dororok.location.dto.LocationDto;
+import com.smartcar.dororok.location.dto.LocationInfoDto;
 import com.smartcar.dororok.location.service.LocationService;
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
@@ -33,7 +33,7 @@ public class RecommendationService {
 
         GetWeatherDto weather = weatherService.getCurrentWeather(lat,lng);
 
-        LocationDto location = locationService.getProvinceAndCityName(locationService.getAddressFromCoordinates(lat, lng));
+        LocationInfoDto location = locationService.getAddressFromCoordinates(lat, lng);
 
         Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
 
@@ -43,8 +43,9 @@ public class RecommendationService {
                 .genres(genres)
                 .lat(lat)
                 .lng(lng)
-                .province(location.getProvinceName())
-                .city(location.getCityName())
+                .region1depthName(location.getRegion1depthName())
+                .region2depthName(location.getRegion2depthName())
+                .region3depthName(location.getRegion3depthName())
                 .skyCondition(weather.getSkyCondition())
                 .precipitationType(weather.getPrecipitationType())
                 .musicMode(musicMode)
