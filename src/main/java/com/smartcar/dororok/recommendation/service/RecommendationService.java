@@ -70,7 +70,7 @@ public class RecommendationService {
         return null;
     }
 
-    public List<PlaceRecommendationDto> getPlacesRecommendation(String lat, String lng) {
+    public List<PlaceRecommendationDto> getPlacesRecommendation() {
         Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
         AgeRange ageRange = destinationService.getAgeRange(member.getBirthday());
         Gender gender = member.getGender();
