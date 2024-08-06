@@ -3,6 +3,7 @@ package com.smartcar.dororok.recommendation.service;
 import com.smartcar.dororok.destination.domain.AgeRange;
 import com.smartcar.dororok.destination.service.DestinationService;
 import com.smartcar.dororok.global.auth.utils.SecurityUtils;
+import com.smartcar.dororok.location.dto.CoordinatesDto;
 import com.smartcar.dororok.location.dto.LocationInfoDto;
 import com.smartcar.dororok.location.service.LocationService;
 import com.smartcar.dororok.member.domain.entitiy.Gender;
@@ -75,7 +76,11 @@ public class RecommendationService {
         Gender gender = member.getGender();
 
         //장고 서버에 dto 보내서 지역 정보 받기
-        return null;
+
+        String address = "";// region1 + " " + region2 + " " + region3;
+        CoordinatesDto coordinates = locationService.getCoordinatesFromAddress(address);
+
+        return getNearByPlacesRecommendation(coordinates.getY(), coordinates.getX());
     }
 
     //현재 위도, 경도 넣었을때 위치기반 관광정보조회 API 호출하여 DTO에 저장하는 코드
@@ -143,7 +148,8 @@ public class RecommendationService {
                 .block();
     }
 
-    //오퍼레이션명세 API 호출하는 코드
+
+    //공통정보조회 API 호출하는 코드
     public Map<String, Object> getPlaceDetailFromAPI(String contentId) {
         return WebClient.create(TourAPIURL)
                 .get()
