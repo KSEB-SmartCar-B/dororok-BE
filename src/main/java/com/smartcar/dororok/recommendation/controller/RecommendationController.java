@@ -38,8 +38,8 @@ public class RecommendationController {
 
     @Operation(summary = "관광지 추천", description = "현재 위도, 경도 넣으면 장고에서 추천 알고리즘 돌려 지역 선정하고, TourAPI에서 제공하는 5개 관광지 정보 제공")
     @GetMapping("/places")
-    public ResponseEntity<Void> getPlacesRecommendation(@RequestParam String lat, @RequestParam String lng) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<PlaceRecommendationRes> getPlacesRecommendation() {
+        return ResponseEntity.ok(new PlaceRecommendationRes(recommendationService.getPlacesRecommendation()));
     }
 
     @Operation(summary = "관광지 상세 정보", description = "관광지의 contentId 전달하면 관광지의 상세 정보 제공")
