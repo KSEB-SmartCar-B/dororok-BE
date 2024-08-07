@@ -24,11 +24,11 @@ public class LocationCodeController {
 //        return ResponseEntity.ok("success");
 //    }
 
-    @GetMapping
-    public ResponseEntity<LocationCodeDto> getLocationCode(@RequestParam String area, @RequestParam String sigungu) {
-        return ResponseEntity.ok(locationCodeService.getLocationCode(LocationCodeReq.builder()
-                .region1depthName(area)
-                .region2depthName(sigungu)
-                .build()));
-    }
+//    @GetMapping
+//    public ResponseEntity<LocationCodeDto> getLocationCode(@RequestParam String area, @RequestParam String sigungu) {
+//        return ResponseEntity.ok(locationCodeService.getLocationCode(LocationCodeReq.builder()
+//                .region1depthName(area)
+//                .region2depthName(sigungu)
+//                .build()));
+//    }
 }

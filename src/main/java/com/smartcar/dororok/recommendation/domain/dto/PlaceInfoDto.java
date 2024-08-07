@@ -5,8 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PlaceRecommendationDto {
+public class PlaceInfoDto {
     private String contentId;
+
+    private String address;
 
     private String region1depthName;
     private String region2depthName;
