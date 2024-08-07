@@ -93,7 +93,7 @@ public class RecommendationService {
         List<Map<String, Object>> item = (List<Map<String, Object>>) items.get("item");
         List<PlaceRecommendationDto> result = new ArrayList<>();
         for (Map<String, Object> place : item) {
-            LocationInfoDto location = locationService.getAddressFromCoordinates(lat, lng);
+            LocationInfoDto location = locationService.getAddressFromCoordinates((String)place.get("mapy") , (String)place.get("mapx"));
             PlaceRecommendationDto placeRecommendationDto = PlaceRecommendationDto.builder()
                     .region1depthName(location.getRegion1depthName())
                     .region2depthName(location.getRegion2depthName())
@@ -121,7 +121,32 @@ public class RecommendationService {
                 .title((String)detail.get("title"))
                 .address((String)detail.get("addr1"))
                 .imageUrl((String)detail.get("firstimage"))
-                .description((String)detail.get("overview"))
+                .build();
+    }
+
+    public PlaceDetailDto getNeraByPlaceDetail(String contentId) {
+        Map<String, Object> res = getPlaceDetailFromAPI(contentId);
+        Map<String, Object> response = (Map<String, Object>) res.get("response");
+        Map<String, Object> body = (Map<String, Object>) response.get("body");
+        Map<String, Object> items = (Map<String, Object>) body.get("items");
+        List<Map<String, Object>> item = (List<Map<String, Object>>) items.get("item");
+
+        Map<String,Object> detail = item.get(0);
+
+        PlaceDetailDto dto = PlaceDetailDto.builder()
+                .title((String)detail.get("title"))
+                .lat((String)detail.get("mapy"))
+                .lng((String)detail.get("mapx"))
+                .cat1((String)detail.get("cat1"))
+                .cat2((String)detail.get("cat2"))
+                .cat3((String)detail.get("cat3"))
+                .build();
+
+
+        return PlaceDetailDto.builder()
+                .title((String)detail.get("title"))
+                .address((String)detail.get("addr1"))
+                .imageUrl((String)detail.get("firstimage"))
                 .build();
     }
 
@@ -161,10 +186,31 @@ public class RecommendationService {
                         .queryParam("MobileOS", "AND")
                         .queryParam("MobileApp", "dororok")
                         .queryParam("contentId", contentId)
-                        .queryParam("overviewYN", "Y")
+                        .queryParam("catcodeYN", "Y")
                         .queryParam("defaultYN", "Y")
                         .queryParam("addrinfoYN", "Y")
                         .queryParam("firstImageYN", "Y")
+                        .queryParam("areacodeYN","Y")
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .block();
+    }
+
+    //지역코드조회 API 호출하는 코드
+    public Map<String, Object> getPlaceAreaCodeFromAPI(Integer areaCode) {
+        return WebClient.create(TourAPIURL)
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/areaCode1")
+                        .queryParam("numOfRows", 100)
+                        .queryParam("_type", "JSON")
+                        .queryParam("serviceKey", key)
+                        .queryParam("MobileOS", "AND")
+                        .queryParam("MobileApp", "dororok")
+                        .queryParam("areaCode", areaCode)
                         .build()
                 )
                 .retrieve()

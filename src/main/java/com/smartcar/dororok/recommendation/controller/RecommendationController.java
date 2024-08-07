@@ -42,9 +42,15 @@ public class RecommendationController {
         return ResponseEntity.ok(new PlaceRecommendationRes(recommendationService.getPlacesRecommendation()));
     }
 
-    @Operation(summary = "관광지 상세 정보", description = "관광지의 contentId 전달하면 관광지의 상세 정보 제공")
+    @Operation(summary = "추천 관광지 상세 정보", description = "관광지의 contentId 전달하면 관광지의 상세 정보 제공")
     @GetMapping("/place/detail")
     public ResponseEntity<PlaceDetailDto> getPlaceDetail(@RequestParam String contentId) {
         return ResponseEntity.ok(recommendationService.getPlaceDetail(contentId));
+    }
+
+    @Operation(summary = "근처 관광지 상세 정보", description = "관광지의 contentId 전달하면 관광지의 상세 정보 제공")
+    @GetMapping("/place/nearby/detail")
+    public ResponseEntity<PlaceDetailDto> getNearByPlaceDetail(@RequestParam String contentId) {
+        return ResponseEntity.ok(recommendationService.getNeraByPlaceDetail(contentId));
     }
 }
