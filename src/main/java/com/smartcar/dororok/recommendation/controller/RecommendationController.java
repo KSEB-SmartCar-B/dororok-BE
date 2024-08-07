@@ -36,7 +36,7 @@ public class RecommendationController {
         return ResponseEntity.ok(new PlaceRecommendationRes(recommendationService.getNearByPlacesRecommendation(lat, lng)));
     }
 
-    @Operation(summary = "관광지 추천", description = "현재 위도, 경도 넣으면 장고에서 추천 알고리즘 돌려 지역 선정하고, TourAPI에서 제공하는 5개 관광지 정보 제공")
+    @Operation(summary = "관광지 추천", description = "장고에서 추천 알고리즘 돌려 지역 선정하고, TourAPI에서 제공하는 5개 관광지 정보 제공")
     @GetMapping("/places")
     public ResponseEntity<PlaceRecommendationRes> getPlacesRecommendation() {
         return ResponseEntity.ok(new PlaceRecommendationRes(recommendationService.getPlacesRecommendation()));
