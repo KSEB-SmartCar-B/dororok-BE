@@ -264,7 +264,7 @@ public class RecommendationService {
                         .queryParam("contentTypeId", 12)
                         .queryParam("mapX", lng)
                         .queryParam("mapY", lat)
-                        .queryParam("radius", 5000)
+                        .queryParam("radius", 7000)
                         .build()
                 )
                 .retrieve()
