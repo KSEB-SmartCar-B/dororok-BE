@@ -47,17 +47,5 @@ public class LocationCodeService {
         }
     }
 
-    public LocationCodeDto getLocationCode (LocationCodeReq req) {
-        String areaName = req.getRegion1depthName();
-        StringTokenizer st = new StringTokenizer(req.getRegion2depthName(), " ");
-        String sigunguName = st.nextToken();
 
-        LocationCode locationCode = locationCodeRepository.findByAreaNameAndSigunguName(areaName, sigunguName).orElse(null);
-
-        return LocationCodeDto.builder()
-                .areaCode(locationCode.getAreaCode())
-                .sigunguCode(locationCode.getSigunguCode())
-                .build();
-
-    }
 }
