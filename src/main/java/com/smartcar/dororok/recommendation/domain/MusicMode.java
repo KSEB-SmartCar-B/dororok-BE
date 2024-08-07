@@ -9,7 +9,9 @@ public enum MusicMode {
     GET_OFF_WORK("퇴근"),
     TRAVEL("여행"),
     DRIVE("드라이브"),
-    DOROROK_PICK("도로록 Pick!");
+    DOROROK_PICK("도로록 Pick!"),
+    DATE("데이트"),
+    FRIENDS("친구들과");
 
     private final String description;
 
