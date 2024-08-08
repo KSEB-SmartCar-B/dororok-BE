@@ -22,7 +22,7 @@ public class GenreController {
     private final GenreService genreService;
 
     @GetMapping("/name-list")
-    @Operation(summary = "모든 장르 이름 리스트", description = "모든 장르 이름 리스트 반환하는 API")
+    @Operation(summary = "모든 장르 이름, 이미지 경로 리스트", description = "모든 장르 이름, 이미지 경로 리스트 반환하는 API")
     public ResponseEntity<AllGenreList> nameList() {
         return ResponseEntity.ok(AllGenreList.builder()
                 .names(genreService.findAllGenreNames())

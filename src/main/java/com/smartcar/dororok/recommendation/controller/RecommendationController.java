@@ -1,6 +1,6 @@
 package com.smartcar.dororok.recommendation.controller;
 
-import com.smartcar.dororok.recommendation.domain.MusicMode;
+import com.smartcar.dororok.musicmode.domain.MusicMode;
 import com.smartcar.dororok.recommendation.domain.res.MusicRecommendationRes;
 import com.smartcar.dororok.recommendation.domain.res.PlaceDetailRes;
 import com.smartcar.dororok.recommendation.domain.res.PlaceRecommendationRes;
