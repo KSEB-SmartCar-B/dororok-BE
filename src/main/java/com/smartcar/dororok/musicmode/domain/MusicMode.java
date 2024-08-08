@@ -1,4 +1,4 @@
-package com.smartcar.dororok.recommendation.domain;
+package com.smartcar.dororok.musicmode.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
