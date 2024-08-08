@@ -6,6 +6,7 @@ import com.smartcar.dororok.member.domain.req.PatchInfoReq;
 import com.smartcar.dororok.member.domain.res.FavoriteGenreList;
 import com.smartcar.dororok.member.domain.res.UpdateResultDto;
 import com.smartcar.dororok.member.service.MemberService;
+import com.smartcar.dororok.recommendation.domain.res.DeleteAccountRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,13 @@ public class MemberController {
 
         return ResponseEntity.ok(memberService.signIn(kakaoAccessToken));
     }
+
+//    @PostMapping("/sign-in/kakaoid")
+//    @Operation(summary = "로그인 (kakaoid로)", description = "kakaoid 이용하여 로그인 할 때 사용하는 API")
+//    public ResponseEntity<JwtToken> signIn(@RequestBody LoginDto dto) {
+//
+//        return ResponseEntity.ok(memberService.signInWithUsername(dto.getUsername()));
+//    }
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입", description = "카카오 액세스 토큰 이용하여 회원가입 할 때 사용하는 API, 장르 보낼 때 \"favoriteGenreLists\": [\"장르이름\", \"장르이름\", \"장르이름\"] 헝식으로 보내면 됨!")
@@ -103,10 +111,15 @@ public class MemberController {
                                     .build());
     }
 
-    @GetMapping("/sign-in/test")
-    public JwtToken signInTest(@RequestParam String email) {
-        return memberService.signInTest(email);
+    @PostMapping("/delete/account")
+    @Operation(summary = "회원탈퇴", description = "현재 로그인한 유저 회원탈퇴")
+    public ResponseEntity<DeleteAccountRes> deleteAccount() {
+        memberService.deleteAccount();
+        return ResponseEntity.ok(DeleteAccountRes.builder()
+                .res("success")
+                .build());
     }
+
 
     @GetMapping("/test")
     @Operation(summary = "로그인 테스트", description = "로그인 하지않고 호출시, 오류발생")

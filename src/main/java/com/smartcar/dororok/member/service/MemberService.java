@@ -12,6 +12,8 @@ import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
 import com.smartcar.dororok.genre.repository.GenreRepository;
 import com.smartcar.dororok.member.repository.MemberRepository;
+import com.smartcar.dororok.music.repository.MusicRepository;
+import com.smartcar.dororok.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,9 +34,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final GenreRepository genreRepository;
     private final FavoriteGenresRepository favoriteGenresRepository;
+    private final MusicRepository musicRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenService jwtTokenService;
     private final KakaoInfoService kakaoInfoService;
+    private final SearchService searchService;
 
     public void signUp(SignUpDto signUpDto) {
         List<String> roles = new ArrayList<>();
@@ -88,6 +92,25 @@ public class MemberService {
 
         //db에 refreshToken 저장
         memberRepository.updateRefreshToken(getUsername(kakaoAccessToken), jwtToken.getRefreshToken());
+
+        return jwtToken;
+    }
+
+    //카카오 고유 아이디로 로그인
+    public JwtToken signInWithUsername(String username) {
+        // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
+        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, "n");
+
+        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
+        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        JwtToken jwtToken = jwtTokenService.generateToken(authentication);
+
+        //db에 refreshToken 저장
+        memberRepository.updateRefreshToken(username, jwtToken.getRefreshToken());
 
         return jwtToken;
     }
@@ -182,22 +205,37 @@ public class MemberService {
         return isUpdated;
     }
 
-    public JwtToken signInTest(String email) {
-        // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
-        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, "n");
+//    public JwtToken signInTest(String email) {
+//        // 1. 카카오 계정 이메일을 기반으로 Authentication 객체 생성
+//        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, "n");
+//
+//        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
+//        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//
+//        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+//        JwtToken jwtToken = jwtTokenService.generateToken(authentication);
+//
+//        memberRepository.updateRefreshToken(email, jwtToken.getRefreshToken());
+//
+//
+//        return jwtToken;
+//    }
 
-        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
-        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+    public void deleteAccount() {
+        Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        JwtToken jwtToken = jwtTokenService.generateToken(authentication);
-
-        memberRepository.updateRefreshToken(email, jwtToken.getRefreshToken());
-
-
-        return jwtToken;
+        //favoriteGenres 삭제
+        favoriteGenresRepository.deleteByMember(findMember);
+        //member_roles 삭제
+        findMember.getRoles().clear();
+        //music 삭제
+        musicRepository.deleteByMember(findMember);
+        //최근 검색기록 삭제
+        searchService.deleteAllSearchLogs();
+        //member 삭제
+        memberRepository.delete(findMember);
     }
 
     public String getUsername(String token) {

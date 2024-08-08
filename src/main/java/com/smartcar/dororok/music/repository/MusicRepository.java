@@ -1,5 +1,6 @@
 package com.smartcar.dororok.music.repository;
 
+import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.music.domain.Music;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,4 +15,6 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
     @Transactional
     @Query("DELETE FROM Music m WHERE m.createdAt < :threshold")
     void deleteOlderThan(LocalDateTime threshold);
+
+    void deleteByMember(Member member);
 }
