@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,12 +30,18 @@ public class Destination {
 
     private String region3depthName;
 
-    public Destination(Long id, AgeRange ageRange, Gender gender, String region1depthName, String region2depthName, String region3depthName) {
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+
+    public Destination(Long id, AgeRange ageRange, Gender gender, String region1depthName, String region2depthName, String region3depthName, LocalDateTime createdDate) {
         this.id = id;
         this.ageRange = ageRange;
         this.gender = gender;
         this.region1depthName = region1depthName;
         this.region2depthName = region2depthName;
         this.region3depthName = region3depthName;
+        this.createdDate = createdDate;
     }
+
+
 }
