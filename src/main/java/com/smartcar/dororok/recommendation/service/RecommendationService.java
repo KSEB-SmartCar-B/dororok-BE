@@ -14,6 +14,7 @@ import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
 import com.smartcar.dororok.member.repository.MemberRepository;
 import com.smartcar.dororok.musicmode.domain.MusicMode;
+import com.smartcar.dororok.recommendation.domain.DayPart;
 import com.smartcar.dororok.recommendation.domain.dto.MusicRecommendationDto;
 import com.smartcar.dororok.recommendation.domain.dto.MusicRecommendationToDjangoDto;
 import com.smartcar.dororok.recommendation.domain.dto.PlaceDetailDto;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -57,6 +59,8 @@ public class RecommendationService {
 
         List<String> genres = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
 
+
+
         MusicRecommendationToDjangoDto dto = MusicRecommendationToDjangoDto.builder()
                 .genres(genres)
                 .memberId(SecurityUtils.getCurrentUsername())
@@ -68,6 +72,7 @@ public class RecommendationService {
                 .skyCondition(weather.getSkyCondition())
                 .precipitationType(weather.getPrecipitationType())
                 .musicMode(musicMode)
+                .dayPart(getCurrentDayPart())
                 .build();
 
         log.info("getMusicRecommendations: {}", dto);
@@ -368,6 +373,21 @@ public class RecommendationService {
         List<PlaceInfoDto> result = getRandomPlaceList(item);
 
         return result;
+    }
+
+    private DayPart getCurrentDayPart() {
+        LocalDateTime now = LocalDateTime.now();
+        int hour = now.getHour();
+
+        if (hour >= 6 && hour < 12) {
+            return DayPart.MORNING;
+        } else if (hour >= 12 && hour < 18) {
+            return DayPart.AFTERNOON;
+        } else if (hour >= 18 && hour < 24) {
+            return DayPart.EVENING;
+        } else {
+            return DayPart.DAYBREAK;
+        }
     }
 
 }
