@@ -42,4 +42,9 @@ public class SearchService {
         String key = getKeyForUser();
         redisTemplate.opsForList().remove(key, 0, searchLog);
     }
+
+    public void deleteAllSearchLogs() {
+        String key = "recentSearches:" + SecurityUtils.getCurrentUsername();
+        redisTemplate.delete(key);
+    }
 }
