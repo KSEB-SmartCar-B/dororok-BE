@@ -1,6 +1,8 @@
 package com.smartcar.dororok.music.service;
 
 import com.smartcar.dororok.global.auth.utils.SecurityUtils;
+import com.smartcar.dororok.member.domain.entitiy.Member;
+import com.smartcar.dororok.member.repository.MemberRepository;
 import com.smartcar.dororok.music.domain.Music;
 import com.smartcar.dororok.music.domain.dto.MusicDto;
 import com.smartcar.dororok.music.repository.MusicRepository;
@@ -17,14 +19,15 @@ import java.time.LocalDateTime;
 public class MusicService {
 
     private final MusicRepository musicRepository;
+    private final MemberRepository memberRepository;
 
     public void saveMusic(MusicDto musicDto) {
-        String memberId = SecurityUtils.getCurrentUsername();
+        Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
         String trackId = musicDto.getTrackId();
 
         musicRepository.save(Music.builder()
                 .trackId(trackId)
-                .memberId(memberId)
+                .member(findMember)
                 .createdAt(LocalDateTime.now())
                 .build());
     }

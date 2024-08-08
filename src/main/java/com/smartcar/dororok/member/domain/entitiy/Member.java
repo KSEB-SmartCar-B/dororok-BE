@@ -3,8 +3,9 @@ package com.smartcar.dororok.member.domain.entitiy;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +27,7 @@ public class Member implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -56,7 +57,7 @@ public class Member implements UserDetails {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<FavoriteGenres> favoriteGenres;
 
 //    public Member(Long id, Gender gender, String nickname, LocalDate birthday, Boolean privacyAgreement, Boolean locationInfoAgreement, String username, String password, String refreshToken, String profileImageUrl, List<String> roles) {
