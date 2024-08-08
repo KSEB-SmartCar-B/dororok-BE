@@ -1,11 +1,13 @@
 package com.smartcar.dororok.recommendation.domain.dto;
 
 import com.smartcar.dororok.musicmode.domain.MusicMode;
+import com.smartcar.dororok.recommendation.domain.DayPart;
 import com.smartcar.dororok.weather.domain.PrecipitationType;
 import com.smartcar.dororok.weather.domain.SkyCondition;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,5 +24,6 @@ public class MusicRecommendationToDjangoDto { //프론트에서 요청받아서 
     private SkyCondition skyCondition; //하늘 상태
     private PrecipitationType precipitationType; //강수 상태
     private MusicMode musicMode; //선택한 음악 모드
+    private DayPart dayPart;
 
 }
