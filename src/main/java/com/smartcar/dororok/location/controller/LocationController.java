@@ -17,8 +17,8 @@ public class LocationController {
 
     private final LocationService locationService;
 
-//    @GetMapping("/info")
-//    public LocationInfoDto locationInfo(@RequestParam String lat, @RequestParam String lng) {
-//        return locationService.getAddressFromCoordinates(lat, lng);
-//    }
+    @GetMapping("/info")
+    public LocationInfoDto locationInfo(@RequestParam String lat, @RequestParam String lng) {
+        return locationService.getAddressFromCoordinates(lat, lng);
+    }
 }

@@ -10,10 +10,12 @@ import com.smartcar.dororok.member.domain.entitiy.Gender;
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 
 @Service
@@ -41,6 +43,12 @@ public class DestinationService {
 
         destinationRepository.save(destination);
 
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    public void deleteDestinationsOlderThanThreeMonths() {
+        LocalDateTime cutoffDate = LocalDateTime.now().minusMonths(3);
+        destinationRepository.deleteOlderThan(cutoffDate);
     }
 
     public AgeRange getAgeRange(LocalDate birthDate) {
