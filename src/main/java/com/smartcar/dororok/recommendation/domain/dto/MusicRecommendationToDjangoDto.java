@@ -15,7 +15,7 @@ import java.util.List;
 public class MusicRecommendationToDjangoDto { //프론트에서 요청받아서 장고서버로 보낼때 사용하는 dto
 
     private List<String> genres;
-    private String memberId;
+    private Long memberId;
     private String lat;
     private String lng;
     private String region1depthName;//도 (광역시는 여기에 ~시)

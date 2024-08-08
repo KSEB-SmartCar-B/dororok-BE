@@ -63,7 +63,7 @@ public class RecommendationService {
 
         MusicRecommendationToDjangoDto dto = MusicRecommendationToDjangoDto.builder()
                 .genres(genres)
-                .memberId(SecurityUtils.getCurrentUsername())
+                .memberId(member.getId())
                 .lat(lat)
                 .lng(lng)
                 .region1depthName(location.getRegion1depthName())

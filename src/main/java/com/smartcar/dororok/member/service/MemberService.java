@@ -1,5 +1,6 @@
 package com.smartcar.dororok.member.service;
 
+import com.smartcar.dororok.favorites.service.FavoritesService;
 import com.smartcar.dororok.global.auth.dto.JwtToken;
 import com.smartcar.dororok.global.auth.service.JwtTokenService;
 import com.smartcar.dororok.global.auth.utils.SecurityUtils;
@@ -39,6 +40,7 @@ public class MemberService {
     private final JwtTokenService jwtTokenService;
     private final KakaoInfoService kakaoInfoService;
     private final SearchService searchService;
+    private final FavoritesService favoritesService;
 
     public void signUp(SignUpDto signUpDto) {
         List<String> roles = new ArrayList<>();
@@ -234,6 +236,8 @@ public class MemberService {
         musicRepository.deleteByMember(findMember);
         //최근 검색기록 삭제
         searchService.deleteAllSearchLogs();
+        //
+        favoritesService.deleteFavoritesByMember(findMember);
         //member 삭제
         memberRepository.delete(findMember);
     }
