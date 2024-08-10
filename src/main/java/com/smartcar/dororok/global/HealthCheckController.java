@@ -9,9 +9,7 @@ import java.util.Map;
 @RestController
 public class HealthCheckController {
     @GetMapping("/health-check")
-    public Map<String, String> healthCheck() {
-        Map<String, String> response = new HashMap<>();
-        response.put("status", "UP");
-        return response;
+    public String healthCheck() {
+        return "OK";
     }
 }
