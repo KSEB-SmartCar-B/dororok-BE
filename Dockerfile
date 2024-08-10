@@ -1,3 +1,4 @@
+#java 버전
 FROM openjdk:17-jdk
 
 # tzdata 패키지 설치 및 타임존 설정

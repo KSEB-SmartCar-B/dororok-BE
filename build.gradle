@@ -5,7 +5,6 @@ plugins {
 }
 
 
-
 group = 'com.smartcar'
 version = '0.0.1-SNAPSHOT'
 
