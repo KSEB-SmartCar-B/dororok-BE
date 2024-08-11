@@ -1,5 +1,7 @@
 server:
   port: 8080
+  # nginx에서 리버스 프록시 이용하므로 관련 설정
+  forward-headers-strategy: framework
 
 spring:
 
