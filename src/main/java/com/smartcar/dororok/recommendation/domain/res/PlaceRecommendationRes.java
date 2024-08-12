@@ -1,18 +1,16 @@
 package com.smartcar.dororok.recommendation.domain.res;
 
 import com.smartcar.dororok.recommendation.domain.dto.PlaceInfoDto;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@Builder
 public class PlaceRecommendationRes {
-    List<PlaceInfoDto> places;
+    private List<PlaceInfoDto> places;
 
-    public PlaceRecommendationRes() {
-    }
+    private Integer pageNumbers;
 
-    public PlaceRecommendationRes(List<PlaceInfoDto> places) {
-        this.places = places;
-    }
 }

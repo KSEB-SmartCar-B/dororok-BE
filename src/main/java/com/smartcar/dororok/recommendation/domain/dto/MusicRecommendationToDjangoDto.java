@@ -25,5 +25,6 @@ public class MusicRecommendationToDjangoDto { //프론트에서 요청받아서 
     private PrecipitationType precipitationType; //강수 상태
     private MusicMode musicMode; //선택한 음악 모드
     private DayPart dayPart;
+    private Integer isFirst;
 
 }
