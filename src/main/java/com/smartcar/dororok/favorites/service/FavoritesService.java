@@ -11,6 +11,7 @@ import com.smartcar.dororok.favorites.domain.res.FavoritesApiRes;
 import com.smartcar.dororok.favorites.repository.FavoritesMusicRepository;
 import com.smartcar.dororok.favorites.repository.FavoritesPlaceRepository;
 import com.smartcar.dororok.global.auth.utils.SecurityUtils;
+import com.smartcar.dororok.global.exception.CustomException;
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class FavoritesService {
 
     public FavoritesApiRes saveMusic(FavoritesMusicDto dto) {
         Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
+        if(isExistMusic(dto.getTrackId()).getIsExisted()){
+            return FavoritesApiRes.builder()
+                    .response("fail")
+                    .build();
+        }
         favoritesMusicRepository.save(FavoritesMusic.builder()
                 .member(findMember)
                 .artist(dto.getArtist())
@@ -45,6 +51,11 @@ public class FavoritesService {
 
     public FavoritesApiRes savePlace(FavoritesPlaceDto dto) {
         Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
+        if (isExistPlace(dto.getContentId()).getIsExisted()) {
+            return FavoritesApiRes.builder()
+                    .response("fail")
+                    .build();
+        }
         favoritesPlaceRepository.save(FavoritesPlace.builder()
                 .member(findMember)
                 .title(dto.getTitle())
