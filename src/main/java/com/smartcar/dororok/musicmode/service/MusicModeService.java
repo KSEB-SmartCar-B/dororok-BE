@@ -17,7 +17,7 @@ public class MusicModeService {
     private final String basicURL = System.getenv("IMAGE_BASIC_URL")+"/images/musicmode_";
 
     private final List<String> names = new ArrayList<>(Arrays.asList("일상","출근","퇴근","여행","드라이브","도로록 Pick!", "데이트", "친구들과"));
-    private final List<String> imageUrls = new ArrayList<>(Arrays.asList("daily.png","go_to_work.png","get_off_work.png","travel.png","drive.png","dororok_pick.png", "date.png", "friends_png"));
+    private final List<String> imageUrls = new ArrayList<>(Arrays.asList("daily.png","go_to_work.png","get_off_work.png","travel.png","drive.png","dororok_pick.png", "date.png", "friends.png"));
 
     public MusicModeRes getMusicMode() {
         List<MusicModeDto> result = new ArrayList<>();
