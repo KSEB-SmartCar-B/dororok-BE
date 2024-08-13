@@ -13,7 +13,7 @@ import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
 import com.smartcar.dororok.genre.repository.GenreRepository;
 import com.smartcar.dororok.member.repository.MemberRepository;
-import com.smartcar.dororok.music.repository.MusicRepository;
+import com.smartcar.dororok.musiclisteninglog.repository.MusicListeningLogRepository;
 import com.smartcar.dororok.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final GenreRepository genreRepository;
     private final FavoriteGenresRepository favoriteGenresRepository;
-    private final MusicRepository musicRepository;
+    private final MusicListeningLogRepository musicRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenService jwtTokenService;
     private final KakaoInfoService kakaoInfoService;
