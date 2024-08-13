@@ -1,11 +1,11 @@
-package com.smartcar.dororok.music.service;
+package com.smartcar.dororok.musiclisteninglog.service;
 
 import com.smartcar.dororok.global.auth.utils.SecurityUtils;
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import com.smartcar.dororok.member.repository.MemberRepository;
-import com.smartcar.dororok.music.domain.Music;
-import com.smartcar.dororok.music.domain.dto.MusicDto;
-import com.smartcar.dororok.music.repository.MusicRepository;
+import com.smartcar.dororok.musiclisteninglog.domain.MusicListeningLog;
+import com.smartcar.dororok.musiclisteninglog.domain.dto.MusicDto;
+import com.smartcar.dororok.musiclisteninglog.repository.MusicListeningLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,16 +16,16 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MusicService {
+public class MusicListeningLogService {
 
-    private final MusicRepository musicRepository;
+    private final MusicListeningLogRepository musicRepository;
     private final MemberRepository memberRepository;
 
     public void saveMusic(MusicDto musicDto) {
         Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
         String trackId = musicDto.getTrackId();
 
-        musicRepository.save(Music.builder()
+        musicRepository.save(MusicListeningLog.builder()
                 .trackId(trackId)
                 .member(findMember)
                 .createdAt(LocalDateTime.now())

@@ -1,4 +1,4 @@
-package com.smartcar.dororok.music.domain;
+package com.smartcar.dororok.musiclisteninglog.domain;
 
 import com.smartcar.dororok.member.domain.entitiy.Member;
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Music {
+public class MusicListeningLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

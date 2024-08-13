@@ -1,4 +1,4 @@
-package com.smartcar.dororok.music.domain.res;
+package com.smartcar.dororok.musiclisteninglog.domain.res;
 
 import lombok.Builder;
 import lombok.Getter;

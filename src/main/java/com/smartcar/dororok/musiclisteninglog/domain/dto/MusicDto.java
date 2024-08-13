@@ -1,4 +1,4 @@
-package com.smartcar.dororok.music.domain.dto;
+package com.smartcar.dororok.musiclisteninglog.domain.dto;
 
 import lombok.Getter;
 
