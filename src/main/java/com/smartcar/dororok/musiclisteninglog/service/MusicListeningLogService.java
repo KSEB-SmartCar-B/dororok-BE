@@ -32,8 +32,8 @@ public class MusicListeningLogService {
                 .build());
     }
 
-    // 매 시간의 정각, 30분마다 추가 된지 2시간 지난 노래 삭제하는 코드 
-    @Scheduled(cron = "0 * * * * ?")
+    // 매 시간의 정각, 30분마다 추가 된지 2시간 지난 노래 삭제하는 코드
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void deleteOldMusic() {
         LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
         musicRepository.deleteOlderThan(twoHoursAgo);
