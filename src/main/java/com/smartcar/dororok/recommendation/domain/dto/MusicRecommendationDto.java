@@ -8,11 +8,13 @@ import lombok.Getter;
 @Builder
 public class MusicRecommendationDto {
 
-    @JsonProperty(value = "TRACK_URI")
-    private String trackURI;
+    private String title;
 
-    @JsonProperty(value = "PLAY_TIME")
-    private Long playTime;
+    private String artist;
+
+    @JsonProperty(value = "track_id")
+    private String trackID;
+
 
     @JsonProperty(value = "TRACK_IMAGE")
     private String trackImage;
