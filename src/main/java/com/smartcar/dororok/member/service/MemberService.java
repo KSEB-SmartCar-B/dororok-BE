@@ -35,7 +35,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final GenreRepository genreRepository;
     private final FavoriteGenresRepository favoriteGenresRepository;
-    private final MusicListeningLogRepository musicRepository;
+    private final MusicListeningLogRepository musicListeningLogRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenService jwtTokenService;
     private final KakaoInfoService kakaoInfoService;
@@ -190,7 +190,7 @@ public class MemberService {
         String currentUsername = SecurityUtils.getCurrentUsername();
         Member member = memberRepository.findByUsername(currentUsername).orElse(null);
 
-        member.getFavoriteGenres().clear();
+        favoriteGenresRepository.deleteByMember(member);
 
         boolean isUpdated = false;
 
@@ -233,7 +233,7 @@ public class MemberService {
         //member_roles 삭제
         findMember.getRoles().clear();
         //music 삭제
-        musicRepository.deleteByMember(findMember);
+        musicListeningLogRepository.deleteByMember(findMember);
         //최근 검색기록 삭제
         searchService.deleteAllSearchLogs();
         //
