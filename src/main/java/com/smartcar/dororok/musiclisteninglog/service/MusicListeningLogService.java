@@ -32,12 +32,11 @@ public class MusicListeningLogService {
                 .build());
     }
 
-    // 매 시간마다 추가 된지 1달 지난 노래 삭제하는 코드
-    @Scheduled(cron = "0 * * * * ?") // 매 시간 정각에 실행
+    // 매 시간의 정각, 30분마다 추가 된지 2시간 지난 노래 삭제하는 코드
+    @Scheduled(cron = "0 * * * * ?")
     public void deleteOldMusic() {
-        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
-        musicRepository.deleteOlderThan(oneMonthAgo);
-
+        LocalDateTime twoHoursAgo = LocalDateTime.now().minusHours(2);
+        musicRepository.deleteOlderThan(twoHoursAgo);
     }
 
 }

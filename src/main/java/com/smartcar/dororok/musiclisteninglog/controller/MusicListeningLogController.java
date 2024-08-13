@@ -21,7 +21,7 @@ public class MusicListeningLogController {
     private final MusicListeningLogService musicListeningLogService;
 
     @PostMapping
-    @Operation(summary = "사용자가 검색하여 일정 시간 이상 들은 음악을 음악 추천을 위한 DB에 저장", description = "사용자가 일정 시간 이상 들은 음악을 음악 추천을 위한 DB에 저장, trackId만 보내주면 됌!")
+    @Operation(summary = "사용자가 일정 시간 이상 들은 음악을 음악 추천을 위한 DB에 저장", description = "사용자가 일정 시간 이상 들은 음악을 음악 추천을 위한 DB에 저장, trackId만 보내주면 됌!")
     public ResponseEntity<PostMusicRes> saveMusic(@RequestBody MusicDto musicDto) {
 
         musicListeningLogService.saveMusic(musicDto);
