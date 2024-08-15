@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MusicMode {
     DAILY( "일상"),
-    GO_TO_WORK("출근"),
-    GET_OFF_WORK("퇴근"),
+    TO_WORK("출근"),
+    LEAVE_WORK("퇴근"),
     TRAVEL("여행"),
     DRIVE("드라이브"),
-    DOROROK_PICK("도로록 Pick!"),
-    DATE("데이트"),
-    FRIENDS("친구들과");
+    DOROROK("도로록 Pick!"),
+    WITH_LOVER("데이트"),
+    WITH_FRIENDS("친구들과");
 
     private final String description;
 

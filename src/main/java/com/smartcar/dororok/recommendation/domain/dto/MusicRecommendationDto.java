@@ -16,6 +16,6 @@ public class MusicRecommendationDto {
     private String trackID;
 
 
-    @JsonProperty(value = "TRACK_IMAGE")
-    private String trackImage;
+    @JsonProperty(value = "album_image")
+    private String albumImage;
 }

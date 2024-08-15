@@ -14,6 +14,9 @@ public interface FavoriteGenresRepository extends JpaRepository<FavoriteGenres, 
     @Query("SELECT fg.genre.name FROM FavoriteGenres fg WHERE fg.member.id = :memberId")
     List<String> findGenreNamesByMemberId(@Param("memberId") Long memberId);
 
+    @Query("SELECT fg.genre.id FROM FavoriteGenres fg WHERE fg.member.id = :memberId")
+    List<String> findGenreIdsByMemberId(@Param("memberId") Long memberId);
+
     void deleteByMember(Member member);
 
 }
