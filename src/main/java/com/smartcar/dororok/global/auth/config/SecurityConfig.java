@@ -35,10 +35,10 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**", "/recommendation/**", "/weather/**", "genre/**", "location/**", "locationcode/**","musicmode/**", "test/**", "/actuator/health")
+                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**", "genre/**", "location/**", "locationcode/**","musicmode/**", "test/**", "/actuator/health")
                                 .permitAll()
                                 // 해당 API에 대해서는 모든 요청을 허가
-                                .requestMatchers("/members/sign-in","/members/sign-up","members/sign-in/test", "members/isSigned").permitAll()
+                                .requestMatchers("/members/sign-in","/members/sign-up","members/sign-in/test", "members/isSigned", "members/sign-in/kakaoid").permitAll()
                                 .requestMatchers("/members/test").hasRole("USER")
                                 // USER 권한이 있어야 요청할 수 있음
                                 //.requestMatchers("/members/test").hasRole("USER")
