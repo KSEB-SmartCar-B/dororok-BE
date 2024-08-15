@@ -49,7 +49,7 @@ public class LocationService {
         Map<String, Object> locationAttributesByCoordinates = getAddressFromCoordinatesAPI(lat, lng);
         List<Map<String, Object>> documents = (List<Map<String, Object>>) locationAttributesByCoordinates.get("documents");
         if (documents == null || documents.isEmpty()) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+            return new LocationInfoDto();
         }
         LocationInfoDto locationInfoDto = new LocationInfoDto(documents.get(0));
 

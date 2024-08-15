@@ -15,11 +15,7 @@ import com.smartcar.dororok.member.repository.FavoriteGenresRepository;
 import com.smartcar.dororok.member.repository.MemberRepository;
 import com.smartcar.dororok.musicmode.domain.MusicMode;
 import com.smartcar.dororok.recommendation.domain.DayPart;
-import com.smartcar.dororok.recommendation.domain.dto.MusicRecommendationDto;
-import com.smartcar.dororok.recommendation.domain.dto.MusicRecommendationToDjangoDto;
-import com.smartcar.dororok.recommendation.domain.dto.PlaceDetailDto;
-import com.smartcar.dororok.recommendation.domain.dto.PlaceInfoDto;
-import com.smartcar.dororok.recommendation.domain.dto.AreaBasedApiDto;
+import com.smartcar.dororok.recommendation.domain.dto.*;
 import com.smartcar.dororok.recommendation.domain.res.PlaceDetailRes;
 import com.smartcar.dororok.recommendation.domain.res.PlaceRecommendationRes;
 import com.smartcar.dororok.weather.domain.GetWeatherDto;
@@ -56,42 +52,52 @@ public class RecommendationService {
 
     public List<MusicRecommendationDto> getMusicRecommendations(String lat, String lng, MusicMode musicMode, Integer isFirst) {
 
-        GetWeatherDto weather = weatherService.getCurrentWeather(lat,lng);
+        GetWeatherDto weather = weatherService.getCurrentWeather(lat, lng);
 
         LocationInfoDto location = locationService.getAddressFromCoordinates(lat, lng);
 
         Member member = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
 
-        List<String> genres = favoriteGenresRepository.findGenreNamesByMemberId(member.getId());
+        List<String> genres = favoriteGenresRepository.findGenreIdsByMemberId(member.getId());
 
 
-
-        MusicRecommendationToDjangoDto dto = MusicRecommendationToDjangoDto.builder()
-                .genres(genres)
-                .memberId(member.getId())
-                .lat(lat)
-                .lng(lng)
-                .region1depthName(location.getRegion1depthName())
-                .region2depthName(location.getRegion2depthName())
-                .region3depthName(location.getRegion3depthName())
-                .skyCondition(weather.getSkyCondition())
-                .precipitationType(weather.getPrecipitationType())
-                .musicMode(musicMode)
-                .dayPart(getCurrentDayPart())
-                .isFirst(isFirst)
-                .build();
+//        MusicRecommendationToDjangoDto dto = MusicRecommendationToDjangoDto.builder()
+//                .genres(genres)
+//                .memberId(member.getId())
+//                .lat(lat)
+//                .lng(lng)
+//                .region1depthName(location.getRegion1depthName())
+//                .region2depthName(location.getRegion2depthName())
+//                .region3depthName(location.getRegion3depthName())
+//                .skyCondition(weather.getSkyCondition())
+//                .precipitationType(weather.getPrecipitationType())
+//                .musicMode(musicMode)
+//                .dayPart(getCurrentDayPart())
+//                .isFirst(isFirst)
+//                .build();
         //이 dto 안쓰는데 일단 남겨두겠음.
 
         //array[string]형으로 넣기 위해
         MultiValueMap<String, String> queryParamGenre = new LinkedMultiValueMap<>();
         genres.forEach(genre -> queryParamGenre.add("genre", genre));
 
-        log.info("getMusicRecommendations: {}", dto);
+        System.out.println(member.getId());
+        System.out.println(queryParamGenre);
+        System.out.println(lat);
+        System.out.println(lng);
+        System.out.println(location.getRegion1depthName());
+        System.out.println(location.getRegion2depthName());
+        System.out.println(weather.getSkyCondition().getDescription());
+        System.out.println(weather.getPrecipitationType().getDescription());
+        System.out.println(musicMode.toString().toLowerCase());
+        System.out.println(getCurrentDayPart().getDescription());
+        System.out.println((isFirst == 1 ? "true" : "false"));
         //장고 서버에 dto 보내서 MusicRecommendationDto 결과 받기
         Map<String, Object> response = WebClient.create(djangoBaseUrl)
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/recommend/music")
+                        .path("/recommend/music/")
+                        .queryParam("member_id", member.getId())
                         .queryParams(queryParamGenre)
                         .queryParam("lat", lat)
                         .queryParam("lng", lng)
@@ -100,9 +106,9 @@ public class RecommendationService {
                         .queryParam("region3depthName", location.getRegion3depthName())
                         .queryParam("skyCondition", weather.getSkyCondition().getDescription())
                         .queryParam("precipitationType", weather.getPrecipitationType().getDescription())
-                        .queryParam("musicMode", musicMode.getDescription())
-                        .queryParam("dayPart", getCurrentDayPart())
-                        .queryParam("isFirst", isFirst)
+                        .queryParam("MusicMode", musicMode.toString().toLowerCase())
+                        .queryParam("dayPart", getCurrentDayPart().getDescription())
+                        .queryParam("is_first", (isFirst == 1 ? "true" : "false"))
                         .build()
                 )
                 .retrieve()
@@ -110,9 +116,19 @@ public class RecommendationService {
                 })
                 .block();
 
-        //result 파싱해서 보내기!
+        List<MusicRecommendationDto> result = new ArrayList<>();
 
-        return null;
+        //result 파싱해서 보내기!
+        List<Map<String, Object>> recommendations = (List<Map<String, Object>>) response.get("recommendations");
+        for (Map<String, Object> recommendation : recommendations) {
+            result.add(MusicRecommendationDto.builder()
+                    .title(recommendation.get("title").toString())
+                    .artist(recommendation.get("artist").toString())
+                    .trackID(recommendation.get("track_id").toString())
+                    .albumImage(recommendation.get("album_image").toString())
+                    .build());
+        }
+        return result;
     }
 
     public List<PlaceInfoDto> getPlacesRecommendation() {
@@ -124,7 +140,7 @@ public class RecommendationService {
         Map<String, Object> response = WebClient.create(djangoBaseUrl)
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/recommend/place")
+                        .path("/recommend/place/")
                         .queryParam("ageRange", ageRange)
                         .queryParam("gender", gender)
                         .build()
@@ -133,19 +149,31 @@ public class RecommendationService {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
                 })
                 .block();
-        //List<String> res = new ArrayList<>(); //여기로 장고에서 돌린 상위 10개 장소 받고
+
+
+        List<PlaceDto> res = new ArrayList<>(); //여기로 장고에서 돌린 상위 10개 장소 받고
+
+        List<Map<String, Object>> recommendations = (List<Map<String, Object>>) response.get("recommendations");
+        for (Map<String, Object> recommendation : recommendations) {
+            res.add(PlaceDto.builder()
+                    .region1depthName(recommendation.get("region1depth_name").toString())
+                    .region2depthName(recommendation.get("region2depth_name").toString())
+                    .build());
+        }
 
         List<PlaceInfoDto> result = new ArrayList<>();
 
-//        for(String s : res) {
-//            LocationCodeReq dto = LocationCodeReq.builder()
-//                    .region1depthName("") //채우기
-//                    .region2depthName("") //채우기
-//                    .build();
-//            LocationCodeDto locationCode = getLocationCode(dto);
-//            PlaceInfoDto placeRecommendation = getPlaceRecommendation(locationCode);
-//            result.add(placeRecommendation);
-//        }
+        for(PlaceDto placeDto : res) {
+            LocationCodeReq dto = LocationCodeReq.builder()
+                    .region1depthName(placeDto.getRegion1depthName()) //채우기
+                    .region2depthName(placeDto.getRegion2depthName()) //채우기
+                    .build();
+            LocationCodeDto locationCode = getLocationCode(dto);
+            System.out.println(locationCode.getAreaCode());
+            System.out.println(locationCode.getSigunguCode());
+            PlaceInfoDto placeRecommendation = getPlaceRecommendation(locationCode);
+            result.add(placeRecommendation);
+        }
 
         return result;
     }
@@ -162,7 +190,7 @@ public class RecommendationService {
         Integer totalCounts = (Integer) body.get("totalCount");
         Integer pageNumbers = (totalCounts / 10) + 1; //로직에선 0번 페이지부터 시작하므로...
 
-        List<PlaceInfoDto> result = getPagingPlaceList(item, pageNo-1); //로직에선 0번 페이지부터 시작하므로..
+        List<PlaceInfoDto> result = getPagingPlaceList(item, pageNo - 1); //로직에선 0번 페이지부터 시작하므로..
 
         return PlaceRecommendationRes.builder()
                 .places(result)
@@ -171,11 +199,11 @@ public class RecommendationService {
     }
 
     //장고 돌려서 나온 지역에서 랜덤으로 하나 뽑아서 추천
-    public PlaceInfoDto getPlaceRecommendation (LocationCodeDto dto) {
+    public PlaceInfoDto getPlaceRecommendation(LocationCodeDto dto) {
         AreaBasedApiDto areaBasedApiDto = AreaBasedApiDto.builder()
-                                .areaCode(Integer.toString(dto.getAreaCode()))
-                                .sigunguCode(Integer.toString(dto.getSigunguCode()))
-                                .build();
+                .areaCode(Integer.toString(dto.getAreaCode()))
+                .sigunguCode(Integer.toString(dto.getSigunguCode()))
+                .build();
 
         Map<String, Object> res = getPlacesInfoFromAreaBasedAPI(areaBasedApiDto);
         Map<String, Object> response = (Map<String, Object>) res.get("response");
@@ -183,7 +211,7 @@ public class RecommendationService {
         Map<String, Object> items = (Map<String, Object>) body.get("items");
         List<Map<String, Object>> item = (List<Map<String, Object>>) items.get("item");
 
-        List<PlaceInfoDto> result = getRandomPlaceList(item);
+        List<PlaceInfoDto> result = getRandomPlaceList5(item);
 
         return result.get(0);
 
@@ -196,18 +224,18 @@ public class RecommendationService {
         Map<String, Object> items = (Map<String, Object>) body.get("items");
         List<Map<String, Object>> item = (List<Map<String, Object>>) items.get("item");
 
-        Map<String,Object> detail = item.get(0);
+        Map<String, Object> detail = item.get(0);
 
         PlaceDetailDto placeDetail = PlaceDetailDto.builder()
-                .contentId((String)detail.get("contentid"))
-                .title((String)detail.get("title"))
-                .address((String)detail.get("addr1"))
-                .imageUrl(getImageUrl((String)detail.get("firstimage")))
+                .contentId((String) detail.get("contentid"))
+                .title((String) detail.get("title"))
+                .address((String) detail.get("addr1"))
+                .imageUrl(getImageUrl((String) detail.get("firstimage")))
                 .build();
 
         AreaBasedApiDto dto = AreaBasedApiDto.builder()
-                .areaCode((String)detail.get("areacode"))
-                .sigunguCode((String)detail.get("sigungucode"))
+                .areaCode((String) detail.get("areacode"))
+                .sigunguCode((String) detail.get("sigungucode"))
                 .build();
 
 
@@ -226,22 +254,22 @@ public class RecommendationService {
         Map<String, Object> items = (Map<String, Object>) body.get("items");
         List<Map<String, Object>> item = (List<Map<String, Object>>) items.get("item");
 
-        Map<String,Object> detail = item.get(0);
+        Map<String, Object> detail = item.get(0);
 
         PlaceDetailDto placeDetail = PlaceDetailDto.builder()
-                .contentId((String)detail.get("contentid"))
-                .title((String)detail.get("title"))
-                .address((String)detail.get("addr1"))
-                .imageUrl(getImageUrl((String)detail.get("firstimage")))
+                .contentId((String) detail.get("contentid"))
+                .title((String) detail.get("title"))
+                .address((String) detail.get("addr1"))
+                .imageUrl(getImageUrl((String) detail.get("firstimage")))
                 .build();
 
         AreaBasedApiDto dto = AreaBasedApiDto.builder()
-               .areaCode((String)detail.get("areacode"))
-               .sigunguCode((String)detail.get("sigungucode"))
-               .cat1((String)detail.get("cat1"))
-               .cat2((String)detail.get("cat2"))
-               //.cat3((String)detail.get("cat3"))
-               .build();
+                .areaCode((String) detail.get("areacode"))
+                .sigunguCode((String) detail.get("sigungucode"))
+                .cat1((String) detail.get("cat1"))
+                .cat2((String) detail.get("cat2"))
+                //.cat3((String)detail.get("cat3"))
+                .build();
 
         List<PlaceInfoDto> placeDetailList = getPlaceDetailRes(dto);
 
@@ -256,19 +284,19 @@ public class RecommendationService {
     //지역기반 관광정보조회	API 호출하는 코드 (JSON을 Map에 저장)
     public Map<String, Object> getPlacesInfoFromAreaBasedAPI(AreaBasedApiDto dto) {
         //대분류, 중분류, 소분류가 없을 경우
-        if(dto.getCat1() == null || dto.getCat2() == null || dto.getCat3() == null) {
+        if (dto.getCat1() == null || dto.getCat2() == null || dto.getCat3() == null) {
             return WebClient.create(TourAPIURL)
                     .get()
                     .uri(uriBuilder -> uriBuilder
-                            .path("//areaBasedList1")
+                            .path("/areaBasedList1")
                             .queryParam("numOfRows", 300)
                             .queryParam("serviceKey", key)
                             .queryParam("MobileOS", "AND")
                             .queryParam("MobileApp", "dororok")
                             .queryParam("_type", "JSON")
                             .queryParam("contentTypeId", 12)
-                            .queryParam("arrange","O")
-                            .queryParam("areaCode",dto.getAreaCode())
+                            .queryParam("arrange", "O")
+                            .queryParam("areaCode", dto.getAreaCode())
                             .queryParam("sigunguCode", dto.getSigunguCode())
                             .build()
                     )
@@ -280,19 +308,19 @@ public class RecommendationService {
         return WebClient.create(TourAPIURL)
                 .get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("//areaBasedList1")
+                        .path("/areaBasedList1")
                         .queryParam("numOfRows", 300)
                         .queryParam("serviceKey", key)
                         .queryParam("MobileOS", "AND")
                         .queryParam("MobileApp", "dororok")
                         .queryParam("_type", "JSON")
                         .queryParam("contentTypeId", 12)
-                        .queryParam("arrange","O")
-                        .queryParam("areaCode",dto.getAreaCode())
+                        .queryParam("arrange", "O")
+                        .queryParam("areaCode", dto.getAreaCode())
                         .queryParam("sigunguCode", dto.getSigunguCode())
-                        .queryParam("cat1",dto.getCat1())
-                        .queryParam("cat2",dto.getCat2())
-                        .queryParam("cat3",dto.getCat3())
+                        .queryParam("cat1", dto.getCat1())
+                        .queryParam("cat2", dto.getCat2())
+                        .queryParam("cat3", dto.getCat3())
                         .build()
                 )
                 .retrieve()
@@ -300,7 +328,6 @@ public class RecommendationService {
                 })
                 .block();
     }
-
 
 
     //위치기반 관광정보조회	API 호출하는 코드 (JSON을 Map에 저장)
@@ -315,7 +342,7 @@ public class RecommendationService {
                         .queryParam("MobileOS", "AND")
                         .queryParam("MobileApp", "dororok")
                         .queryParam("_type", "JSON")
-                        .queryParam("arrange","O")
+                        .queryParam("arrange", "O")
                         .queryParam("contentTypeId", 12)
                         .queryParam("mapX", lng)
                         .queryParam("mapY", lat)
@@ -327,7 +354,6 @@ public class RecommendationService {
                 })
                 .block();
     }
-
 
 
     //공통정보조회 API 호출하는 코드
@@ -345,7 +371,7 @@ public class RecommendationService {
                         .queryParam("defaultYN", "Y")
                         .queryParam("addrinfoYN", "Y")
                         .queryParam("firstImageYN", "Y")
-                        .queryParam("areacodeYN","Y")
+                        .queryParam("areacodeYN", "Y")
                         .build()
                 )
                 .retrieve()
@@ -375,7 +401,7 @@ public class RecommendationService {
     }
 
     //areacode, sigungucode 얻어오는 코드
-    private LocationCodeDto getLocationCode (LocationCodeReq req) {
+    private LocationCodeDto getLocationCode(LocationCodeReq req) {
         String areaName = req.getRegion1depthName();
         StringTokenizer st = new StringTokenizer(req.getRegion2depthName(), " ");
         String sigunguName = st.nextToken();
@@ -390,6 +416,31 @@ public class RecommendationService {
     }
 
     //장소 리스트에서 랜덤으로 10개의 장소 뽑는 코드
+    private List<PlaceInfoDto> getRandomPlaceList5(List<Map<String, Object>> item) {
+        // 섞기
+        Collections.shuffle(item);
+
+        // 5개 항목 선택
+        List<Map<String, Object>> selectedItems = item.size() > 5 ? item.subList(0, 5) : item;
+        System.out.println(selectedItems);
+        List<PlaceInfoDto> result = new ArrayList<>();
+        for (Map<String, Object> place : selectedItems) {
+            LocationInfoDto location = locationService.getAddressFromCoordinates((String) place.get("mapy"), (String) place.get("mapx"));
+            PlaceInfoDto placeRecommendationDto = PlaceInfoDto.builder()
+                    .region1depthName(location.getRegion1depthName())
+                    .region2depthName(location.getRegion2depthName())
+                    .region3depthName(location.getRegion3depthName())
+                    .address((String) place.get("addr1"))
+                    .contentId((String) place.get("contentid"))
+                    .imageUrl(getImageUrl((String) place.get("firstimage")))
+                    .title((String) place.get("title"))
+                    .build();
+            result.add(placeRecommendationDto);
+        }
+        return result;
+    }
+
+    //장소 리스트에서 랜덤으로 10개의 장소 뽑는 코드
     private List<PlaceInfoDto> getRandomPlaceList(List<Map<String, Object>> item) {
         // 섞기
         Collections.shuffle(item);
@@ -399,15 +450,15 @@ public class RecommendationService {
 
         List<PlaceInfoDto> result = new ArrayList<>();
         for (Map<String, Object> place : selectedItems) {
-            LocationInfoDto location = locationService.getAddressFromCoordinates((String)place.get("mapy") , (String)place.get("mapx"));
+            LocationInfoDto location = locationService.getAddressFromCoordinates((String) place.get("mapy"), (String) place.get("mapx"));
             PlaceInfoDto placeRecommendationDto = PlaceInfoDto.builder()
                     .region1depthName(location.getRegion1depthName())
                     .region2depthName(location.getRegion2depthName())
                     .region3depthName(location.getRegion3depthName())
-                    .address((String)place.get("addr1"))
-                    .contentId((String)place.get("contentid"))
-                    .imageUrl(getImageUrl((String)place.get("firstimage")))
-                    .title((String)place.get("title"))
+                    .address((String) place.get("addr1"))
+                    .contentId((String) place.get("contentid"))
+                    .imageUrl(getImageUrl((String) place.get("firstimage")))
+                    .title((String) place.get("title"))
                     .build();
             result.add(placeRecommendationDto);
         }
@@ -438,15 +489,15 @@ public class RecommendationService {
 
         List<PlaceInfoDto> result = new ArrayList<>();
         for (Map<String, Object> place : selectedItems) {
-            LocationInfoDto location = locationService.getAddressFromCoordinates((String)place.get("mapy"), (String)place.get("mapx"));
+            LocationInfoDto location = locationService.getAddressFromCoordinates((String) place.get("mapy"), (String) place.get("mapx"));
             PlaceInfoDto placeRecommendationDto = PlaceInfoDto.builder()
                     .region1depthName(location.getRegion1depthName())
                     .region2depthName(location.getRegion2depthName())
                     .region3depthName(location.getRegion3depthName())
-                    .address((String)place.get("addr1"))
-                    .contentId((String)place.get("contentid"))
-                    .imageUrl(getImageUrl((String)place.get("firstimage")))
-                    .title((String)place.get("title"))
+                    .address((String) place.get("addr1"))
+                    .contentId((String) place.get("contentid"))
+                    .imageUrl(getImageUrl((String) place.get("firstimage")))
+                    .title((String) place.get("title"))
                     .build();
             result.add(placeRecommendationDto);
         }
@@ -455,13 +506,13 @@ public class RecommendationService {
 
     //이미지 없으면 default.png 리턴
     private String getImageUrl(String imageUrl) {
-        if(imageUrl.isEmpty()){
+        if (imageUrl.isEmpty()) {
             return imageBasicUrl + "/images/default.png";
         }
         return imageUrl;
     }
 
-    private List<PlaceInfoDto> getPlaceDetailRes (AreaBasedApiDto dto) {
+    private List<PlaceInfoDto> getPlaceDetailRes(AreaBasedApiDto dto) {
         Map<String, Object> res = getPlacesInfoFromAreaBasedAPI(dto);
 
         Map<String, Object> response = (Map<String, Object>) res.get("response");
