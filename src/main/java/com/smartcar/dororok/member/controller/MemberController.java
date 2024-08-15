@@ -46,12 +46,12 @@ public class MemberController {
         return ResponseEntity.ok(memberService.signIn(kakaoAccessToken));
     }
 
-//    @PostMapping("/sign-in/kakaoid")
-//    @Operation(summary = "로그인 (kakaoid로)", description = "kakaoid 이용하여 로그인 할 때 사용하는 API")
-//    public ResponseEntity<JwtToken> signIn(@RequestBody LoginDto dto) {
-//
-//        return ResponseEntity.ok(memberService.signInWithUsername(dto.getUsername()));
-//    }
+    @PostMapping("/sign-in/kakaoid")
+    @Operation(summary = "로그인 (kakaoid로)", description = "kakaoid 이용하여 로그인 할 때 사용하는 API")
+    public ResponseEntity<JwtToken> signIn(@RequestBody LoginDto dto) {
+
+        return ResponseEntity.ok(memberService.signInWithUsername(dto.getUsername()));
+    }
 
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입", description = "카카오 액세스 토큰 이용하여 회원가입 할 때 사용하는 API, 장르 보낼 때 \"favoriteGenreLists\": [\"장르이름\", \"장르이름\", \"장르이름\"] 헝식으로 보내면 됨!")
