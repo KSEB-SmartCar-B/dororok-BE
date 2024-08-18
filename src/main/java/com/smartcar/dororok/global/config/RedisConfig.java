@@ -28,12 +28,7 @@ public class RedisConfig {
         redisConfiguration.setPort(Integer.parseInt(port));
         redisConfiguration.setPassword(password);
 
-        // 타임아웃 설정
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-                .commandTimeout(Duration.ofSeconds(5))  // 타임아웃을 5초로 설정
-                .build();
-
-        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisConfiguration,clientConfig);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisConfiguration);
         return lettuceConnectionFactory;
     }
 
