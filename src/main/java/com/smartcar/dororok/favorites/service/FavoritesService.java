@@ -110,6 +110,16 @@ public class FavoritesService {
                 .build();
     }
 
+    public FavoritesApiRes deleteFavoritesMusicList(List<String> trackIds) {
+        Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
+        for (String trackId : trackIds) {
+            favoritesMusicRepository.deleteByMemberIdAndTrackId(findMember.getId(), trackId);
+        }
+        return FavoritesApiRes.builder()
+                .response("success")
+                .build();
+    }
+
     public FavoritesApiRes deleteFavoritesPlace(String contentId) {
         Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
         favoritesPlaceRepository.deleteByMemberIdAndContentId(findMember.getId(), contentId);
@@ -117,6 +127,18 @@ public class FavoritesService {
                 .response("success")
                 .build();
     }
+
+    public FavoritesApiRes deleteFavoritesPlaceList(List<String> contentIds) {
+        Member findMember = memberRepository.findByUsername(SecurityUtils.getCurrentUsername()).orElse(null);
+        for (String contentId : contentIds) {
+            favoritesPlaceRepository.deleteByMemberIdAndContentId(findMember.getId(), contentId);
+        }
+        return FavoritesApiRes.builder()
+                .response("success")
+                .build();
+    }
+
+
 
     public void deleteFavoritesByMember(Member findMember) {
         favoritesMusicRepository.deleteAllByMember(findMember);
