@@ -46,7 +46,12 @@ dependencies {
 	implementation 'org.json:json:20230227'
 
 	//redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation("org.springframework.boot:spring-boot-starter-data-redis") {
+		exclude group: "io.lettuce", module: "lettuce-core"
+	}
+	implementation("redis.clients:jedis")
+	implementation("org.apache.commons:commons-pool2")
 
 	//health check
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
