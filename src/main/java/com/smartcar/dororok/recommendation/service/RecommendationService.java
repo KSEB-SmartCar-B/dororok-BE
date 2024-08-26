@@ -61,44 +61,14 @@ public class RecommendationService {
         List<String> genres = favoriteGenresRepository.findGenreIdsByMemberId(member.getId());
 
 
-//        MusicRecommendationToDjangoDto dto = MusicRecommendationToDjangoDto.builder()
-//                .genres(genres)
-//                .memberId(member.getId())
-//                .lat(lat)
-//                .lng(lng)
-//                .region1depthName(location.getRegion1depthName())
-//                .region2depthName(location.getRegion2depthName())
-//                .region3depthName(location.getRegion3depthName())
-//                .skyCondition(weather.getSkyCondition())
-//                .precipitationType(weather.getPrecipitationType())
-//                .musicMode(musicMode)
-//                .dayPart(getCurrentDayPart())
-//                .isFirst(isFirst)
-//                .build();
-        //이 dto 안쓰는데 일단 남겨두겠음.
 
-        //array[string]형으로 넣기 위해
-        MultiValueMap<String, String> queryParamGenre = new LinkedMultiValueMap<>();
-        genres.forEach(genre -> queryParamGenre.add("genre", genre));
-
-        System.out.println(member.getId());
-        System.out.println(queryParamGenre);
-        System.out.println(lat);
-        System.out.println(lng);
-        System.out.println(location.getRegion1depthName());
-        System.out.println(location.getRegion2depthName());
-        System.out.println(weather.getSkyCondition().getDescription());
-        System.out.println(weather.getPrecipitationType().getDescription());
-        System.out.println(musicMode.toString().toLowerCase());
-        System.out.println(getCurrentDayPart().getDescription());
-        System.out.println((isFirst == 1 ? "true" : "false"));
         //장고 서버에 dto 보내서 MusicRecommendationDto 결과 받기
         Map<String, Object> response = WebClient.create(djangoBaseUrl)
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/recommend/music/")
                         .queryParam("member_id", member.getId())
-                        .queryParams(queryParamGenre)
+                        .queryParams(null)
                         .queryParam("lat", lat)
                         .queryParam("lng", lng)
                         .queryParam("region1depthName", location.getRegion1depthName())
